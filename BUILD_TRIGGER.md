@@ -1,0 +1,1 @@
+# Build verification\n\nGitHub Actions runs \`npm ci\` and \`npm run build\` for every push to main.\n
