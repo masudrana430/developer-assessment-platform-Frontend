@@ -131,3 +131,5 @@ for (const check of checks) {
 const failed = checks.filter((item) => !item.ok);
 if (failed.length) process.exit(1);
 console.log(`\nAll ${checks.length} live smoke checks passed.`);
+
+// Trigger live QA workflow after workflow registration.
