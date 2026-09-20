@@ -1,10 +1,10 @@
 # Developer Assessment Platform Frontend
 
-A base frontend for the existing Developer Assessment Platform backend.
+Full responsive frontend for the Developer Assessment Platform backend.
 
 ## Stack
 
-- Next.js (App Router)
+- Next.js 15 App Router
 - TypeScript
 - React 19
 - Tailwind CSS 4
@@ -13,28 +13,60 @@ A base frontend for the existing Developer Assessment Platform backend.
 
 ## Backend
 
-Default production API:
+Production API:
 
 ```text
 https://developer-assessment-platform.onrender.com/api/v1
 ```
 
-Configure with:
+Configure:
 
 ```env
 NEXT_PUBLIC_API_BASE_URL=https://developer-assessment-platform.onrender.com/api/v1
 ```
 
-## Included base pages
+## Features
 
-- `/` — landing page
-- `/login` — email/password login
-- `/assessments` — public assessment list
-- `/dashboard` — authenticated profile dashboard
+### Public
+- Responsive landing page
+- Light / dark theme toggle with saved preference
+- Assessment catalog with search, difficulty filter and sorting
+- Assessment detail page
+- Candidate registration and login
+- Responsive navigation
 
-The login page stores the access/refresh token in localStorage for this starter frontend. For a production frontend, prefer secure HttpOnly cookies managed by your server/BFF layer.
+### Candidate
+- Role-protected dashboard
+- Enrollment
+- Stripe Checkout redirect
+- Attempt list and status filtering
+- Timed assessment execution
+- MCQ / text / code answer saving
+- Final submission
+- Review waiting state
+- Evaluated score, pass/fail and reviewer feedback
+- Profile editing and avatar upload
 
-## Run locally
+### Reviewer
+- Reviewer dashboard
+- Managed assessment list
+- Create assessment
+- Add MCQ / TEXT / CODE questions
+- Publish assessment
+- Review queue
+- Atomic claim workflow
+- Subjective-answer grading
+- Final evaluation and overall feedback
+
+### Admin
+- Dashboard statistics
+- User search / role / status filtering
+- Role changes
+- Block / activate users
+- Soft delete users
+- Audit-log viewer and action filter
+
+## Local setup
 
 ```bash
 npm install
@@ -48,37 +80,37 @@ Open:
 http://localhost:3000
 ```
 
-## Demo account
-
-```text
-Candidate: candidate@devassess.com
-Password: Candidate123!
-```
-
-## GitHub push
+## Build
 
 ```bash
-git init
-git add .
-git commit -m "feat: initialize Next.js frontend"
-git branch -M main
-git remote add origin https://github.com/masudrana430/developer-assessment-platform-Frontend.git
-git push -u origin main
+npm run build
 ```
 
-If `origin` already exists:
+## Demo accounts
 
-```bash
-git remote set-url origin https://github.com/masudrana430/developer-assessment-platform-Frontend.git
-git push -u origin main
-```
+| Role | Email | Password |
+|---|---|---|
+| Candidate | candidate@devassess.com | Candidate123! |
+| Reviewer | reviewer@devassess.com | Reviewer123! |
+| Admin | admin@devassess.com | Admin123! |
 
-## Suggested next pages
+## Routes
 
-- Candidate assessment details + enrollment
-- Stripe Checkout redirect page
-- Attempt execution UI with timer
-- Reviewer assessment management
-- Reviewer grading queue
-- Admin users/stats/audit logs
-- Role-based navigation and route guards
+- `/`
+- `/login`
+- `/register`
+- `/assessments`
+- `/assessments/[id]`
+- `/dashboard`
+- `/profile`
+- `/attempts`
+- `/attempts/[id]`
+- `/reviewer`
+- `/reviewer/assessments/new`
+- `/reviewer/assessments/[id]`
+- `/reviewer/reviews/[id]`
+- `/admin`
+
+## Authentication note
+
+This assignment frontend stores access/refresh tokens in localStorage and refreshes expired access tokens through the backend refresh endpoint. For a production security model, an HttpOnly-cookie/BFF design is preferable.
