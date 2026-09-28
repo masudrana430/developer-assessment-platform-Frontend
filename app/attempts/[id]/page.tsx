@@ -32,7 +32,7 @@ function AttemptContent() {
   const checkout = useMutation({
     mutationFn: () => apiRequest<ApiResponse<{ checkoutUrl: string | null }>>(`/payments/attempts/${params.id}/checkout`, { method: "POST", auth: true }),
     onSuccess: (result) => {
-      if (result.data.checkoutUrl) window.location.href = result.data.checkoutUrl;
+      if (result.data.checkoutUrl) { sessionStorage.setItem("dap_checkout_attempt", params.id); window.location.assign(result.data.checkoutUrl); }
     },
   });
 
