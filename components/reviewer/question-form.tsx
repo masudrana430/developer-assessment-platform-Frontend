@@ -18,8 +18,8 @@ const schema = z
   .object({
     type: z.enum(["MCQ", "TEXT", "CODE"]),
     prompt: z.string().trim().min(3, "Prompt is required").max(10000),
-    points: z.coerce.number().int().min(1).max(100),
-    order: z.coerce.number().int().min(1).max(1000),
+    points: z.number().int().min(1).max(100),
+    order: z.number().int().min(1).max(1000),
     optionsText: z.string(),
     correctAnswer: z.string(),
   })
@@ -123,8 +123,8 @@ export function QuestionForm({
             </>
           ) : null}
           <div className="grid grid-cols-2 gap-3">
-            <Field label="Points" error={errors.points?.message}><Input type="number" min={1} max={100} {...register("points")} /></Field>
-            <Field label="Order" error={errors.order?.message}><Input type="number" min={1} {...register("order")} /></Field>
+            <Field label="Points" error={errors.points?.message}><Input type="number" min={1} max={100} {...register("points", { valueAsNumber: true })} /></Field>
+            <Field label="Order" error={errors.order?.message}><Input type="number" min={1} {...register("order", { valueAsNumber: true })} /></Field>
           </div>
           <Button className="w-full" disabled={isSubmitting}>
             {isSubmitting ? <LoaderCircle className="animate-spin" size={16} /> : <Plus size={16} />}

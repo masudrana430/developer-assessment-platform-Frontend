@@ -73,10 +73,11 @@ export default function ReviewAttemptPage() {
     return <main className="mx-auto max-w-5xl px-4 py-12 sm:px-6"><p className="rounded-xl bg-red-500/10 p-4 text-red-600">{query.error instanceof Error ? query.error.message : "Review not found"}</p></main>;
   }
 
-  const evaluated = attempt.status === "EVALUATED";
+  const reviewAttempt = attempt;
+  const evaluated = reviewAttempt.status === "EVALUATED";
 
   async function submit(values: GradeValues) {
-    const questions = attempt.assessment.questions ?? [];
+    const questions = reviewAttempt.assessment.questions ?? [];
     const pointsByAnswer = new Map<string, number>();
     for (const question of questions) {
       const answer = question.answers?.[0];
@@ -119,15 +120,15 @@ export default function ReviewAttemptPage() {
 
       <div className="mt-5 flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
         <div>
-          <p className="text-sm font-semibold text-[var(--primary)]">Candidate: {attempt.candidate?.name}</p>
-          <h1 className="mt-1 text-3xl font-bold">{attempt.assessment.title}</h1>
-          <p className="mt-2 text-sm text-[var(--muted)]">{attempt.candidate?.email}</p>
+          <p className="text-sm font-semibold text-[var(--primary)]">Candidate: {reviewAttempt.candidate?.name}</p>
+          <h1 className="mt-1 text-3xl font-bold">{reviewAttempt.assessment.title}</h1>
+          <p className="mt-2 text-sm text-[var(--muted)]">{reviewAttempt.candidate?.email}</p>
         </div>
-        <Badge tone={evaluated ? "green" : "amber"}>{attempt.status.replaceAll("_", " ")}</Badge>
+        <Badge tone={evaluated ? "green" : "amber"}>{reviewAttempt.status.replaceAll("_", " ")}</Badge>
       </div>
 
       <form className="mt-8 space-y-5" onSubmit={handleSubmit(submit)} noValidate>
-        {(attempt.assessment.questions ?? []).map((question, index) => (
+        {(reviewAttempt.assessment.questions ?? []).map((question, index) => (
           <GradeQuestion key={question.id} question={question} index={index} register={register} readOnly={evaluated} />
         ))}
 

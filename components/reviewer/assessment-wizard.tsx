@@ -20,9 +20,9 @@ const schema = z.object({
   slug: z.string().trim().min(3).max(100).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Use lowercase kebab-case"),
   description: z.string().trim().min(20, "Description must be at least 20 characters").max(5000),
   difficulty: z.enum(["JUNIOR", "MID", "SENIOR"]),
-  durationMinutes: z.coerce.number().int().min(5).max(480),
-  passingScore: z.coerce.number().min(0).max(100),
-  feeCents: z.coerce.number().int().min(0).max(10000000),
+  durationMinutes: z.number().int().min(5).max(480),
+  passingScore: z.number().min(0).max(100),
+  feeCents: z.number().int().min(0).max(10000000),
   currency: z.string().trim().length(3, "Use a 3-letter currency code").transform((value) => value.toLowerCase()),
 });
 
@@ -130,10 +130,10 @@ export function AssessmentWizard() {
         {step === 1 ? (
           <div className="grid gap-5 sm:grid-cols-2">
             <Field label="Duration (minutes)" error={errors.durationMinutes?.message}>
-              <Input type="number" min={5} max={480} {...register("durationMinutes")} />
+              <Input type="number" min={5} max={480} {...register("durationMinutes", { valueAsNumber: true })} />
             </Field>
             <Field label="Passing score (%)" error={errors.passingScore?.message}>
-              <Input type="number" min={0} max={100} step="0.1" {...register("passingScore")} />
+              <Input type="number" min={0} max={100} step="0.1" {...register("passingScore", { valueAsNumber: true })} />
             </Field>
             <div className="sm:col-span-2 rounded-xl bg-[var(--muted-bg)] p-4 text-sm leading-6 text-[var(--muted)]">
               Questions and total points are added after this wizard. The backend prevents publishing an assessment without scoreable questions.
@@ -145,7 +145,7 @@ export function AssessmentWizard() {
           <div className="space-y-5">
             <div className="grid gap-5 sm:grid-cols-2">
               <Field label="Fee in cents" error={errors.feeCents?.message}>
-                <Input type="number" min={0} {...register("feeCents")} />
+                <Input type="number" min={0} {...register("feeCents", { valueAsNumber: true })} />
               </Field>
               <Field label="Currency" error={errors.currency?.message}>
                 <Input maxLength={3} {...register("currency")} />

@@ -77,8 +77,13 @@ export function Navbar() {
       {open ? (
         <div className="border-t border-[var(--border)] bg-[var(--card)] px-4 py-3 lg:hidden">
           <nav className="mx-auto grid max-w-7xl gap-1" aria-label="Mobile navigation">
-            {[...primaryLinks, ...roleLinks].map((item) => {
-              const Icon = "icon" in item ? item.icon : ClipboardList;
+            {primaryLinks.map((item) => (
+              <Link key={item.href} href={item.href} onClick={() => setOpen(false)} className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium hover:bg-[var(--muted-bg)]">
+                <ClipboardList size={17} /> {item.label}
+              </Link>
+            ))}
+            {roleLinks.map((item) => {
+              const Icon = item.icon;
               return (
                 <Link key={item.href} href={item.href} onClick={() => setOpen(false)} className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium hover:bg-[var(--muted-bg)]">
                   <Icon size={17} /> {item.label}
