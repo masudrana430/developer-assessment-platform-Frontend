@@ -1,28 +1,16 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
-import { apiRequest } from "@/lib/api";
-import {
-  clearAuthTokens,
-  getAccessToken,
-  getStoredUser,
-  setAuthTokens,
-  setStoredUser,
-} from "@/lib/auth";
+import { apiRequest, authRequest } from "@/lib/api";
+import { clearStoredUser, getStoredUser, setStoredUser } from "@/lib/auth";
 import type { ApiResponse, User } from "@/types";
-
-type Session = {
-  accessToken: string;
-  refreshToken?: string;
-  user: User;
-};
 
 type AuthContextValue = {
   user: User | null;
   loading: boolean;
-  setSession: (session: Session) => void;
+  setSessionUser: (user: User) => void;
   refreshUser: () => Promise<User | null>;
-  logout: () => void;
+  logout: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -32,19 +20,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   const refreshUser = useCallback(async () => {
-    if (!getAccessToken()) {
-      setUser(null);
-      setLoading(false);
-      return null;
-    }
-
     try {
       const response = await apiRequest<ApiResponse<User>>("/users/me", { auth: true });
       setUser(response.data);
       setStoredUser(response.data);
       return response.data;
     } catch {
-      clearAuthTokens();
+      clearStoredUser();
       setUser(null);
       return null;
     } finally {
@@ -61,19 +43,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener("dap-auth-change", sync);
   }, [refreshUser]);
 
-  function setSession(session: Session) {
-    setAuthTokens(session.accessToken, session.refreshToken);
-    setStoredUser(session.user);
-    setUser(session.user);
+  function setSessionUser(nextUser: User) {
+    setStoredUser(nextUser);
+    setUser(nextUser);
   }
 
-  function logout() {
-    clearAuthTokens();
-    setUser(null);
+  async function logout() {
+    try {
+      await authRequest<ApiResponse<null>>("logout", {
+        method: "POST",
+        body: JSON.stringify({}),
+      });
+    } finally {
+      clearStoredUser();
+      setUser(null);
+    }
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, setSession, refreshUser, logout }}>
+    <AuthContext.Provider value={{ user, loading, setSessionUser, refreshUser, logout }}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,88 +1,85 @@
-import { clearAuthTokens, getAccessToken, getRefreshToken, setAuthTokens } from "@/lib/auth";
-import type { ApiResponse } from "@/types";
-
-export const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL ??
-  "https://developer-assessment-platform.onrender.com/api/v1";
-
-type ApiOptions = RequestInit & {
-  auth?: boolean;
-  retryAuth?: boolean;
-};
-
 export class ApiError extends Error {
   status: number;
   errors?: unknown;
 
   constructor(message: string, status: number, errors?: unknown) {
     super(message);
+    this.name = "ApiError";
     this.status = status;
     this.errors = errors;
   }
 }
 
-async function refreshAccessToken() {
-  const refreshToken = getRefreshToken();
-  if (!refreshToken) return null;
+type ApiOptions = RequestInit & {
+  auth?: boolean;
+};
 
-  const response = await fetch(`${API_BASE_URL}/auth/refresh-token`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ refreshToken }),
-  });
+function getMessage(payload: unknown, status: number) {
+  if (
+    typeof payload === "object" &&
+    payload !== null &&
+    "message" in payload &&
+    typeof (payload as { message?: unknown }).message === "string"
+  ) {
+    return (payload as { message: string }).message;
+  }
+  return `Request failed with status ${status}`;
+}
 
-  if (!response.ok) return null;
-  const payload = (await response.json()) as ApiResponse<{
-    accessToken: string;
-    refreshToken?: string;
-  }>;
-  setAuthTokens(payload.data.accessToken, payload.data.refreshToken ?? refreshToken);
-  return payload.data.accessToken;
+function getErrors(payload: unknown) {
+  if (typeof payload === "object" && payload !== null && "errors" in payload) {
+    return (payload as { errors?: unknown }).errors;
+  }
+  return undefined;
 }
 
 export async function apiRequest<T>(
   path: string,
   options: ApiOptions = {},
 ): Promise<T> {
-  const { auth = false, retryAuth = true, headers, body, ...rest } = options;
+  const { headers, body, ...rest } = options;
   const isFormData = typeof FormData !== "undefined" && body instanceof FormData;
-  const token = auth ? getAccessToken() : null;
 
-  const response = await fetch(`${API_BASE_URL}${path}`, {
+  const response = await fetch(`/api/backend${path}`, {
     ...rest,
     body,
+    credentials: "include",
     headers: {
       ...(isFormData ? {} : { "Content-Type": "application/json" }),
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...(headers ?? {}),
     },
   });
 
-  if (response.status === 401 && auth && retryAuth) {
-    const nextToken = await refreshAccessToken();
-    if (nextToken) {
-      return apiRequest<T>(path, { ...options, retryAuth: false });
-    }
-    clearAuthTokens();
-  }
-
-  const text = await response.text();
-  let data: any = null;
-  if (text) {
-    try {
-      data = JSON.parse(text);
-    } catch {
-      data = text;
-    }
-  }
+  const contentType = response.headers.get("content-type") ?? "";
+  const payload: unknown = contentType.includes("application/json")
+    ? await response.json()
+    : await response.text();
 
   if (!response.ok) {
-    const message =
-      typeof data === "object" && data?.message
-        ? data.message
-        : `Request failed with status ${response.status}`;
-    throw new ApiError(message, response.status, data?.errors);
+    throw new ApiError(getMessage(payload, response.status), response.status, getErrors(payload));
   }
 
-  return data as T;
+  return payload as T;
+}
+
+export async function authRequest<T>(
+  action: "login" | "register" | "logout",
+  options: RequestInit = {},
+): Promise<T> {
+  const response = await fetch(`/api/auth/${action}`, {
+    ...options,
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+      ...(options.headers ?? {}),
+    },
+  });
+
+  const payload: unknown = await response.json();
+
+  if (!response.ok) {
+    throw new ApiError(getMessage(payload, response.status), response.status, getErrors(payload));
+  }
+
+  return payload as T;
 }
