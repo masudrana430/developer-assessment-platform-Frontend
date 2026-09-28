@@ -50,8 +50,25 @@ export function AdminUsers() {
         auth: true,
         body: JSON.stringify({ status: next }),
       }),
-    onSuccess: () => { toast.success("User status updated"); refresh(); },
-    onError: (error) => toast.error(error instanceof Error ? error.message : "Unable to update status"),
+    onMutate: async ({ userId, next }) => {
+      await queryClient.cancelQueries({ queryKey: ["admin-users"] });
+      const snapshots = queryClient.getQueriesData<ApiResponse<User[]>>({ queryKey: ["admin-users"] });
+      queryClient.setQueriesData<ApiResponse<User[]>>({ queryKey: ["admin-users"] }, (old) =>
+        old
+          ? {
+              ...old,
+              data: old.data.map((user) => (user.id === userId ? { ...user, status: next } : user)),
+            }
+          : old,
+      );
+      return { snapshots };
+    },
+    onError: (error, _variables, context) => {
+      context?.snapshots.forEach(([key, value]) => queryClient.setQueryData(key, value));
+      toast.error(error instanceof Error ? error.message : "Unable to update status");
+    },
+    onSuccess: () => toast.success("User status updated"),
+    onSettled: refresh,
   });
 
   const updateRole = useMutation({
@@ -61,8 +78,25 @@ export function AdminUsers() {
         auth: true,
         body: JSON.stringify({ role: next }),
       }),
-    onSuccess: () => { toast.success("User role updated"); refresh(); },
-    onError: (error) => toast.error(error instanceof Error ? error.message : "Unable to update role"),
+    onMutate: async ({ userId, next }) => {
+      await queryClient.cancelQueries({ queryKey: ["admin-users"] });
+      const snapshots = queryClient.getQueriesData<ApiResponse<User[]>>({ queryKey: ["admin-users"] });
+      queryClient.setQueriesData<ApiResponse<User[]>>({ queryKey: ["admin-users"] }, (old) =>
+        old
+          ? {
+              ...old,
+              data: old.data.map((user) => (user.id === userId ? { ...user, role: next } : user)),
+            }
+          : old,
+      );
+      return { snapshots };
+    },
+    onError: (error, _variables, context) => {
+      context?.snapshots.forEach(([key, value]) => queryClient.setQueryData(key, value));
+      toast.error(error instanceof Error ? error.message : "Unable to update role");
+    },
+    onSuccess: () => toast.success("User role updated"),
+    onSettled: refresh,
   });
 
   const remove = useMutation({
