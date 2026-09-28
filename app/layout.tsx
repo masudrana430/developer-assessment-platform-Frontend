@@ -4,11 +4,21 @@ import Providers from "./providers";
 import { Navbar } from "@/components/navbar";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://developer-assessment-platform-front.vercel.app"),
   title: {
     default: "DevAssess",
     template: "%s | DevAssess",
   },
-  description: "Developer assessments with secure payments, timed attempts and reviewer evaluation.",
+  description:
+    "A full-stack developer assessment platform with secure payments, timed attempts, reviewer evaluation and role-based administration.",
+  openGraph: {
+    title: "DevAssess",
+    description:
+      "Developer assessments with Stripe payments, timed attempts and structured evaluation.",
+    type: "website",
+    url: "https://developer-assessment-platform-front.vercel.app",
+    siteName: "DevAssess",
+  },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
