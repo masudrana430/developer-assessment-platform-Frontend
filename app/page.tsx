@@ -33,9 +33,9 @@ export default function HomePage() {
               accentColor="#6FC8FF"
               highlight="#FFFFFF"
               density={26}
-              speed={72}
-              hover={180}
-              reach={30}
+              speed={100}
+              hover={200}
+              reach={23}
             />
           </div>
 
