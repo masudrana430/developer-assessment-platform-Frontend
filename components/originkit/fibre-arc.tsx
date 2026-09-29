@@ -39,7 +39,7 @@ float vnoise(vec2 p){
 float fbm3(vec2 p){ float s = 0.0, a = 0.5; for(int i = 0; i < 3; i++){ s += a * vnoise(p); p = p * 2.07 + vec2(4.1, 2.3); a *= 0.5; } return s; }
 
 uniform vec3 uBg, uBase, uAccent, uHigh;
-uniform float uStrands, uCurve, uSpread, uThin, uComb, uReach, uDir;
+uniform float uStrands, uCurve, uSpread, uThin, uComb, uReach, uDir, uIntensity;
 
 void main(){
   float ar = uRes.x / max(uRes.y, 1.0);
@@ -74,8 +74,8 @@ void main(){
   float env = mix(0.20, 1.0, sat((ps.x + 0.52) / 0.95));
   core *= env; halo *= env;
   vec3 col = uBg;
-  col += uBase * halo * 1.5;
-  col += mix(uAccent, uHigh, sat(core * 0.75)) * core * 1.4;
+  col += uBase * halo * 1.5 * uIntensity;
+  col += mix(uAccent, uHigh, sat(core * 0.75)) * core * 1.4 * uIntensity;
   gl_FragColor = vec4(clamp(col, 0.0, 1.0), 1.0);
 }
 `
@@ -145,6 +145,7 @@ interface Props {
     hover?: number
     reach?: number
     bundle?: BundleGroup
+    intensity?: number
 }
 
 function __OriginkitBase_FibreArc(props: Props) {
@@ -160,6 +161,7 @@ function __OriginkitBase_FibreArc(props: Props) {
         hover = 200,
         reach = 23,
         bundle,
+        intensity = 100,
         width,
         height,
     } = props
@@ -185,6 +187,7 @@ function __OriginkitBase_FibreArc(props: Props) {
         spread: clampN(num(bundle_.spread, 100), 0, 300) / 100,
         thickness: clampN(num(bundle_.thickness, 100), 20, 400) / 100,
         comb: clampN(num(bundle_.comb, 170), 0, 400) / 100,
+        intensity: clampN(num(intensity, 100), 60, 180) / 100,
     }
 
     const ptrRef = useRef({ x: 0.5, y: 0.5, tx: 0.5, ty: 0.5, on: 0, onTarget: 0 })
@@ -272,6 +275,7 @@ function __OriginkitBase_FibreArc(props: Props) {
             gl.uniform1f(u("uSpread"), v.spread as number)
             gl.uniform1f(u("uThin"), v.thickness as number)
             gl.uniform1f(u("uComb"), v.comb as number)
+            gl.uniform1f(u("uIntensity"), v.intensity as number)
 
             gl.drawArrays(gl.TRIANGLES, 0, 3)
             raf = requestAnimationFrame(render)
