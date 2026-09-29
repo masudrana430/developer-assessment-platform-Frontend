@@ -29,8 +29,8 @@ export default function HomePage() {
             <ThemeFibreArc />
           </div>
 
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-white/80 via-white/35 to-transparent dark:from-[#06101F]/80 dark:via-[#06101F]/42" />
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-white/45 via-transparent to-white/20 dark:from-[#06101F]/45 dark:to-white/[0.02]" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-white/35 via-white/10 to-transparent dark:from-[#06101F]/80 dark:via-[#06101F]/42" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-white/15 via-transparent to-white/5 dark:from-[#06101F]/45 dark:to-white/[0.02]" />
           <div className="pointer-events-none absolute -right-28 top-8 h-80 w-80 rounded-full bg-cyan-400/15 blur-3xl dark:bg-cyan-300/10" />
           <div className="pointer-events-none absolute bottom-0 left-1/3 h-72 w-72 rounded-full bg-blue-400/15 blur-3xl dark:bg-blue-500/10" />
 
