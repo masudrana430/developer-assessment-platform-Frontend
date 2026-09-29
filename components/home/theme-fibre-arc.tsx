@@ -22,7 +22,7 @@ export default function ThemeFibreArc() {
       hover={200}
       reach={26}
       intensity={145}
-      lightMode={false}
+      lightMode={!dark}
     />
   );
 }
