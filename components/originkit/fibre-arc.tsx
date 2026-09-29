@@ -277,27 +277,51 @@ function __OriginkitBase_FibreArc(props: Props) {
             raf = requestAnimationFrame(render)
         }
 
+        // Track the pointer at window level instead of only on the canvas.
+        // The canvas is a visual background, while the hero content sits above it.
+        // Window-level tracking keeps the Originkit hover interaction active even
+        // when the pointer is over headings, buttons, or the workflow card.
         const track = (e: PointerEvent) => {
             const r = canvas.getBoundingClientRect()
             if (r.width <= 0 || r.height <= 0) return
+
+            const inside =
+                e.clientX >= r.left &&
+                e.clientX <= r.right &&
+                e.clientY >= r.top &&
+                e.clientY <= r.bottom
+
+            if (!inside) {
+                ptrRef.current.onTarget = 0
+                return
+            }
+
             ptrRef.current.tx = clampN((e.clientX - r.left) / r.width, 0, 1)
             ptrRef.current.ty = clampN((e.clientY - r.top) / r.height, 0, 1)
             ptrRef.current.onTarget = 1
         }
+
         const onLeave = () => {
             ptrRef.current.onTarget = 0
         }
 
-        canvas.addEventListener("pointermove", track)
-        canvas.addEventListener("pointerenter", track)
-        canvas.addEventListener("pointerleave", onLeave)
+        window.addEventListener("pointermove", track, { passive: true })
+        window.addEventListener("pointerdown", track, { passive: true })
+        window.addEventListener("blur", onLeave)
+        document.documentElement.addEventListener("mouseleave", onLeave)
         raf = requestAnimationFrame(render)
 
         return () => {
             cancelAnimationFrame(raf)
-            canvas.removeEventListener("pointermove", track)
-            canvas.removeEventListener("pointerenter", track)
-            canvas.removeEventListener("pointerleave", onLeave)
+            window.removeEventListener("pointermove", track)
+            window.removeEventListener("pointerdown", track)
+            window.removeEventListener("blur", onLeave)
+            document.documentElement.removeEventListener("mouseleave", onLeave)
+
+            if (buf) gl.deleteBuffer(buf)
+            gl.deleteProgram(prog)
+            gl.deleteShader(vs)
+            gl.deleteShader(fs)
         }
     }, [])
 
@@ -316,7 +340,7 @@ function __OriginkitBase_FibreArc(props: Props) {
         >
             <canvas
                 ref={canvasRef}
-                style={{ position: "absolute", inset: 0, width: "100%", height: "100%", display: "block" }}
+                style={{ position: "absolute", inset: 0, width: "100%", height: "100%", display: "block", pointerEvents: "none" }}
             />
         </div>
     )
