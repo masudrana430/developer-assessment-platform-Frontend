@@ -14,6 +14,7 @@ export function Navbar() {
     { href: "/assessments", label: "Assessments" },
     { href: "/features", label: "Features" },
     { href: "/pricing", label: "Pricing" },
+    { href: "/faq", label: "FAQ" },
   ];
 
   const roleLinks = [
