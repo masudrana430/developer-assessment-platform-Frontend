@@ -73,17 +73,22 @@ void main(){
   }
   float env = mix(0.20, 1.0, sat((ps.x + 0.52) / 0.95));
   core *= env; halo *= env;
-  vec3 col = uBg;
   if (uLightMode > 0.5) {
-    float strandMask = sat((halo * 7.0 + core * 1.25) * uIntensity);
-    vec3 strand = mix(uBase, uAccent, sat(core * 0.55 + halo * 2.2));
-    strand = mix(strand, uHigh, sat(core * 0.34));
-    col = mix(uBg, strand, strandMask * 0.82);
-  } else {
+    // Preserve the dark-mode fibre appearance, but composite only the fibres
+    // over the light wrapper background instead of painting a dark canvas.
+    vec3 col = vec3(0.02745, 0.07843, 0.14902);
     col += uBase * halo * 1.5 * uIntensity;
     col += mix(uAccent, uHigh, sat(core * 0.75)) * core * 1.4 * uIntensity;
+
+    float alpha = sat((halo * 5.5 + core * 1.35) * uIntensity);
+    alpha = smoothstep(0.035, 0.92, alpha);
+    gl_FragColor = vec4(clamp(col, 0.0, 1.0), alpha * 0.96);
+  } else {
+    vec3 col = uBg;
+    col += uBase * halo * 1.5 * uIntensity;
+    col += mix(uAccent, uHigh, sat(core * 0.75)) * core * 1.4 * uIntensity;
+    gl_FragColor = vec4(clamp(col, 0.0, 1.0), 1.0);
   }
-  gl_FragColor = vec4(clamp(col, 0.0, 1.0), 1.0);
 }
 `
 
@@ -205,7 +210,7 @@ function __OriginkitBase_FibreArc(props: Props) {
     useEffect(() => {
         const canvas = canvasRef.current
         if (!canvas) return
-        const gl = canvas.getContext("webgl", { antialias: false, alpha: false, depth: false })
+        const gl = canvas.getContext("webgl", { antialias: false, alpha: true, premultipliedAlpha: false, depth: false })
         if (!gl) {
             console.error("FibreArc: WebGL unavailable")
             return
