@@ -331,6 +331,6 @@ const __originkitPresetProps = {
   }
 };
 
-export default function FibreArc(props: Record<string, unknown>) {
-  return <__OriginkitBase_FibreArc {...(__originkitPresetProps as Record<string, unknown>)} {...props} />;
+export default function FibreArc(props: Props) {
+  return <__OriginkitBase_FibreArc {...__originkitPresetProps} {...props} />;
 }
