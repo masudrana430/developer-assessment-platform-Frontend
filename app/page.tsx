@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, BadgeCheck, CreditCard, TimerReset, UsersRound, ShieldCheck, BarChart3, Sparkles } from "lucide-react";
 import ThemeFibreArc from "@/components/home/theme-fibre-arc";
-import ReviewMarquee from "@/components/home/review-marquee";
 import { Card } from "@/components/ui/card";
 
 const features = [
@@ -140,31 +139,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="px-4 pb-20 sm:px-6 sm:pb-24">
-        <div className="mx-auto max-w-7xl">
-          <div className="mb-8 grid gap-5 lg:grid-cols-[1fr_.72fr] lg:items-end">
-            <div>
-              <p className="text-sm font-bold uppercase tracking-[0.18em] text-[var(--primary)]">
-                Community feedback
-              </p>
-              <h2 className="mt-3 max-w-3xl text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
-                A moving wall of platform experiences.
-              </h2>
-            </div>
-
-            <div className="lg:pb-1">
-              <p className="text-sm leading-6 text-[var(--muted)] sm:text-base">
-                Four auto-moving testimonial columns run continuously in alternating directions with the same 3D perspective treatment.
-              </p>
-              <p className="mt-2 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--muted)]">
-                Demo testimonial content for interface presentation
-              </p>
-            </div>
-          </div>
-
-          <ReviewMarquee />
-        </div>
-      </section>
     </main>
   );
 }
