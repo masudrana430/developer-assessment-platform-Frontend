@@ -145,19 +145,19 @@ export default function HomePage() {
           <div className="mb-8 grid gap-5 lg:grid-cols-[1fr_.72fr] lg:items-end">
             <div>
               <p className="text-sm font-bold uppercase tracking-[0.18em] text-[var(--primary)]">
-                Workflow perspectives
+                Community feedback
               </p>
               <h2 className="mt-3 max-w-3xl text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
-                See the platform from every role.
+                A moving wall of platform experiences.
               </h2>
             </div>
 
             <div className="lg:pb-1">
               <p className="text-sm leading-6 text-[var(--muted)] sm:text-base">
-                A 3D moving review wall showing sample perspectives from Candidate, Reviewer and Administrator workflows. Hover any column to pause and inspect the cards.
+                Four continuously animated testimonial lanes move in alternating directions with a 3D perspective effect. Hover a lane to pause it and inspect the cards.
               </p>
               <p className="mt-2 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--muted)]">
-                Illustrative feedback — not customer endorsements
+                Demo testimonial content for interface presentation
               </p>
             </div>
           </div>
