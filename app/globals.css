@@ -106,15 +106,17 @@ button, input, select, textarea { font: inherit; }
 
 @keyframes review-marquee-horizontal {
   from { transform: translate3d(0, 0, 0); }
-  to { transform: translate3d(calc(-100% - var(--gap)), 0, 0); }
+  to { transform: translate3d(calc(-50% - 0.5rem), 0, 0); }
 }
 
 @keyframes review-marquee-vertical {
   from { transform: translate3d(0, 0, 0); }
-  to { transform: translate3d(0, calc(-100% - var(--gap)), 0); }
+  to { transform: translate3d(0, calc(-50% - 0.5rem), 0); }
 }
 
-.review-marquee-track {
+.review-marquee-rail {
+  width: max-content;
+  height: max-content;
   will-change: transform;
   backface-visibility: hidden;
   transform: translateZ(0);
