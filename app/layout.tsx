@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Providers from "./providers";
 import { Navbar } from "@/components/navbar";
+import { Footer } from "@/components/footer";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://developer-assessment-platform-front.vercel.app"),
@@ -28,9 +29,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <Providers>
           <Navbar />
           {children}
-          <footer className="border-t border-[var(--border)] py-8 text-center text-sm text-[var(--muted)]">
-            DevAssess · Developer Assessment Platform
-          </footer>
+          <Footer />
         </Providers>
       </body>
     </html>
