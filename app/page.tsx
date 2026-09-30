@@ -154,7 +154,7 @@ export default function HomePage() {
 
             <div className="lg:pb-1">
               <p className="text-sm leading-6 text-[var(--muted)] sm:text-base">
-                Four continuously animated testimonial lanes move in alternating directions with a 3D perspective effect, creating a constant flow of review cards.
+                Four auto-moving testimonial columns run continuously in alternating directions with the same 3D perspective treatment.
               </p>
               <p className="mt-2 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--muted)]">
                 Demo testimonial content for interface presentation
