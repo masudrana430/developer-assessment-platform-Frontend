@@ -4,10 +4,8 @@ import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 type MarqueeProps = ComponentPropsWithoutRef<"div"> & {
   reverse?: boolean;
-  pauseOnHover?: boolean;
   children: ReactNode;
   vertical?: boolean;
-  repeat?: number;
   ariaLabel?: string;
   ariaLive?: "off" | "polite" | "assertive";
 };
@@ -15,44 +13,42 @@ type MarqueeProps = ComponentPropsWithoutRef<"div"> & {
 export function Marquee({
   className = "",
   reverse = false,
-  pauseOnHover = false,
   children,
   vertical = false,
-  repeat = 3,
   ariaLabel,
   ariaLive = "off",
   ...props
 }: MarqueeProps) {
-  const directionClass = vertical ? "flex-col" : "flex-row";
-  const animationClass = vertical ? "review-marquee-vertical" : "review-marquee-horizontal";
-
   return (
     <div
       {...props}
       className={[
-        "group flex overflow-hidden p-2 [--duration:40s] [--gap:1rem] [gap:var(--gap)]",
-        directionClass,
+        "relative flex overflow-hidden p-2 [--gap:1rem]",
+        vertical ? "flex-col" : "flex-row",
         className,
       ].join(" ")}
       aria-label={ariaLabel}
       aria-live={ariaLive}
       role="region"
-      tabIndex={0}
     >
-      {Array.from({ length: repeat }, (_, index) => (
+      <div
+        className={[
+          "review-marquee-rail flex shrink-0 [gap:var(--gap)]",
+          vertical ? "flex-col" : "flex-row",
+          vertical ? "review-marquee-vertical" : "review-marquee-horizontal",
+          reverse ? "[animation-direction:reverse]" : "",
+        ].join(" ")}
+      >
+        <div className={["flex shrink-0 [gap:var(--gap)]", vertical ? "flex-col" : "flex-row"].join(" ")}>
+          {children}
+        </div>
         <div
-          key={index}
-          className={[
-            "review-marquee-track flex shrink-0 justify-around [gap:var(--gap)]",
-            directionClass,
-            animationClass,
-            pauseOnHover ? "group-hover:[animation-play-state:paused] group-focus-within:[animation-play-state:paused]" : "",
-            reverse ? "[animation-direction:reverse]" : "",
-          ].join(" ")}
+          aria-hidden="true"
+          className={["flex shrink-0 [gap:var(--gap)]", vertical ? "flex-col" : "flex-row"].join(" ")}
         >
           {children}
         </div>
-      ))}
+      </div>
     </div>
   );
 }
@@ -162,9 +158,7 @@ export default function ReviewMarquee() {
       >
         <Marquee
           vertical
-          pauseOnHover
-          repeat={3}
-          className="h-[720px] [--duration:40s]"
+          className="h-[720px] [--duration:18s]"
           ariaLabel="Testimonials column one"
         >
           {testimonials.map((review) => (
@@ -174,10 +168,8 @@ export default function ReviewMarquee() {
 
         <Marquee
           vertical
-          pauseOnHover
           reverse
-          repeat={3}
-          className="h-[720px] [--duration:42s]"
+          className="h-[720px] [--duration:22s]"
           ariaLabel="Testimonials column two"
         >
           {reversed.map((review) => (
@@ -187,9 +179,7 @@ export default function ReviewMarquee() {
 
         <Marquee
           vertical
-          pauseOnHover
-          repeat={3}
-          className="hidden h-[720px] [--duration:44s] sm:flex"
+          className="hidden h-[720px] [--duration:20s] sm:flex"
           ariaLabel="Testimonials column three"
         >
           {testimonials.map((review) => (
@@ -199,10 +189,8 @@ export default function ReviewMarquee() {
 
         <Marquee
           vertical
-          pauseOnHover
           reverse
-          repeat={3}
-          className="hidden h-[720px] [--duration:46s] lg:flex"
+          className="hidden h-[720px] [--duration:24s] lg:flex"
           ariaLabel="Testimonials column four"
         >
           {reversed.map((review) => (
