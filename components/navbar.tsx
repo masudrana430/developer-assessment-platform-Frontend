@@ -13,6 +13,7 @@ export function Navbar() {
   const primaryLinks = [
     { href: "/assessments", label: "Assessments" },
     { href: "/features", label: "Features" },
+    { href: "/about", label: "About" },
     { href: "/pricing", label: "Pricing" },
     { href: "/faq", label: "FAQ" },
   ];
@@ -91,8 +92,6 @@ export function Navbar() {
                 </Link>
               );
             })}
-            <Link href="/about" onClick={() => setOpen(false)} className="rounded-xl px-3 py-3 text-sm font-medium hover:bg-[var(--muted-bg)]">About</Link>
-            <Link href="/faq" onClick={() => setOpen(false)} className="rounded-xl px-3 py-3 text-sm font-medium hover:bg-[var(--muted-bg)]">FAQ</Link>
             {!user ? (
               <>
                 <Link href="/login" onClick={() => setOpen(false)} className="rounded-xl px-3 py-3 text-sm font-semibold hover:bg-[var(--muted-bg)]">Sign in</Link>
