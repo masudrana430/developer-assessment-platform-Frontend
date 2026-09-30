@@ -102,3 +102,29 @@ button, input, select, textarea { font: inherit; }
     animation-duration: 1ms !important;
   }
 }
+
+
+@keyframes review-marquee-horizontal {
+  from { transform: translateX(0); }
+  to { transform: translateX(calc(-100% - var(--gap))); }
+}
+
+@keyframes review-marquee-vertical {
+  from { transform: translateY(0); }
+  to { transform: translateY(calc(-100% - var(--gap))); }
+}
+
+.review-marquee-horizontal {
+  animation: review-marquee-horizontal var(--duration) linear infinite;
+}
+
+.review-marquee-vertical {
+  animation: review-marquee-vertical var(--duration) linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .review-marquee-horizontal,
+  .review-marquee-vertical {
+    animation-play-state: paused !important;
+  }
+}
