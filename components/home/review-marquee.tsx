@@ -1,15 +1,6 @@
 "use client";
 
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
-import {
-  BadgeCheck,
-  ClipboardCheck,
-  CreditCard,
-  ShieldCheck,
-  TimerReset,
-  UsersRound,
-  type LucideIcon,
-} from "lucide-react";
 
 type MarqueeProps = ComponentPropsWithoutRef<"div"> & {
   reverse?: boolean;
@@ -18,6 +9,7 @@ type MarqueeProps = ComponentPropsWithoutRef<"div"> & {
   vertical?: boolean;
   repeat?: number;
   ariaLabel?: string;
+  ariaLive?: "off" | "polite" | "assertive";
 };
 
 export function Marquee({
@@ -28,6 +20,7 @@ export function Marquee({
   vertical = false,
   repeat = 3,
   ariaLabel,
+  ariaLive = "off",
   ...props
 }: MarqueeProps) {
   const directionClass = vertical ? "flex-col" : "flex-row";
@@ -37,21 +30,23 @@ export function Marquee({
     <div
       {...props}
       className={[
-        "group flex overflow-hidden [--duration:38s] [--gap:0.9rem] [gap:var(--gap)]",
+        "group flex overflow-hidden p-2 [--duration:40s] [--gap:1rem] [gap:var(--gap)]",
         directionClass,
         className,
       ].join(" ")}
       aria-label={ariaLabel}
+      aria-live={ariaLive}
       role="region"
+      tabIndex={0}
     >
       {Array.from({ length: repeat }, (_, index) => (
         <div
           key={index}
           className={[
-            "flex shrink-0 justify-around [gap:var(--gap)]",
+            "review-marquee-track flex shrink-0 justify-around [gap:var(--gap)]",
             directionClass,
             animationClass,
-            pauseOnHover ? "group-hover:[animation-play-state:paused]" : "",
+            pauseOnHover ? "group-hover:[animation-play-state:paused] group-focus-within:[animation-play-state:paused]" : "",
             reverse ? "[animation-direction:reverse]" : "",
           ].join(" ")}
         >
@@ -62,125 +57,165 @@ export function Marquee({
   );
 }
 
-type Perspective = {
-  role: string;
-  handle: string;
-  body: string;
-  label: string;
-  Icon: LucideIcon;
-};
-
-const perspectives: Perspective[] = [
+const testimonials = [
   {
-    role: "Candidate",
-    handle: "Assessment flow",
-    body: "Enrollment, payment, timed execution and submission are presented as one clear journey.",
-    label: "Sample perspective",
-    Icon: UsersRound,
+    name: "Ava Green",
+    username: "@ava",
+    body: "The assessment flow feels clear from enrollment all the way through submission.",
+    img: "https://cdn.21st.dev/assets/mirror/55/55cf6231499bcdc496f15ff1d28d4170ac9b99e9279495caa44fca70886d8b2e.jpg",
+    country: "🇦🇺 Australia",
   },
   {
-    role: "Reviewer",
-    handle: "Evaluation workflow",
-    body: "Question management and structured grading keep reviewer work focused on the assessment itself.",
-    label: "Sample perspective",
-    Icon: ClipboardCheck,
+    name: "Ana Miller",
+    username: "@ana",
+    body: "The timed attempt experience is focused and easy to follow.",
+    img: "https://cdn.21st.dev/assets/mirror/f0/f07b84f12ef125cbb837a7bd64da401992f5f62bd55fee10d01cd3dcc8abae80.jpg",
+    country: "🇩🇪 Germany",
   },
   {
-    role: "Administrator",
-    handle: "Platform oversight",
-    body: "Role controls, user management and audit visibility make operational supervision easier to follow.",
-    label: "Sample perspective",
-    Icon: ShieldCheck,
+    name: "Mateo Rossi",
+    username: "@mat",
+    body: "Reviewer workflows feel structured instead of cluttered.",
+    img: "https://cdn.21st.dev/assets/mirror/7c/7c0d2aa99715b15c218385f5679347782843c02f939d8eee6f9cb1cad6ba6ed0.jpg",
+    country: "🇮🇹 Italy",
   },
   {
-    role: "Candidate",
-    handle: "Timed attempt",
-    body: "A visible countdown and saved answers make the in-progress assessment state predictable.",
-    label: "Sample perspective",
-    Icon: TimerReset,
+    name: "Maya Patel",
+    username: "@maya",
+    body: "Role-based navigation makes the platform easy to understand.",
+    img: "https://cdn.21st.dev/assets/mirror/f8/f8f2ddc445b6b2318430260bdebb665c9415865827230565aa42f57c9c794baf.jpg",
+    country: "🇮🇳 India",
   },
   {
-    role: "Candidate",
-    handle: "Secure checkout",
-    body: "The payment step stays separate from the attempt flow and returns candidates to the correct state.",
-    label: "Sample perspective",
-    Icon: CreditCard,
+    name: "Noah Smith",
+    username: "@noah",
+    body: "The checkout-to-attempt handoff feels clean and predictable.",
+    img: "https://cdn.21st.dev/assets/mirror/ae/ae1d49872fdd6f8d9aa933f6ca8bce8cb1ba7e87dfb9d2926661184cb7bfe26d.jpg",
+    country: "🇺🇸 USA",
   },
   {
-    role: "Reviewer",
-    handle: "Scoring",
-    body: "Automatic MCQ scoring and reviewer-evaluated subjective answers create a practical hybrid grading model.",
-    label: "Sample perspective",
-    Icon: BadgeCheck,
+    name: "Lucas Stone",
+    username: "@luc",
+    body: "The interface stays responsive even across the more complex flows.",
+    img: "https://cdn.21st.dev/assets/mirror/9a/9aac54d62e727561f6958213b8a3649230a3bba61ba5ddf63c69d3c6e4aecb0a.jpg",
+    country: "🇫🇷 France",
+  },
+  {
+    name: "Haruto Sato",
+    username: "@haru",
+    body: "The mobile experience still feels intentional and usable.",
+    img: "https://cdn.21st.dev/assets/mirror/e5/e55f3cdab57eb4084f7006cfe9f7f047e638e1b257a53498aaed14b83087152a.jpg",
+    country: "🇯🇵 Japan",
+  },
+  {
+    name: "Emma Lee",
+    username: "@emma",
+    body: "The review and feedback states make the result journey easy to follow.",
+    img: "https://cdn.21st.dev/assets/mirror/03/03410c155320ba33ecb8d798807c6c9610f33b2b2acdd4ed961a68185806df79.jpg",
+    country: "🇨🇦 Canada",
+  },
+  {
+    name: "Carlos Ray",
+    username: "@carl",
+    body: "The visual hierarchy keeps the platform feeling calm and professional.",
+    img: "https://cdn.21st.dev/assets/mirror/b5/b58616f0d669595c9a42d60a0b9803364c9859f1c3db93a5e3dc408b603e03e8.jpg",
+    country: "🇪🇸 Spain",
   },
 ];
 
-function PerspectiveCard({ role, handle, body, label, Icon }: Perspective) {
+function TestimonialCard({ img, name, username, body, country }: (typeof testimonials)[number]) {
   return (
-    <article className="w-56 rounded-2xl border border-slate-200/90 bg-white/90 p-4 shadow-[0_16px_45px_rgba(37,99,235,0.10)] backdrop-blur-xl dark:border-white/10 dark:bg-slate-900/85 dark:shadow-[0_16px_45px_rgba(0,0,0,0.24)] sm:w-60">
-      <div className="flex items-center gap-3">
-        <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-gradient-to-br from-blue-600 to-cyan-500 text-white shadow-lg shadow-blue-500/20">
-          <Icon size={18} />
+    <article className="review-testimonial-card w-52 rounded-2xl border border-slate-200/90 bg-white/95 p-4 shadow-[0_16px_45px_rgba(15,23,42,0.08)] backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:scale-[1.015] hover:border-blue-300/80 hover:shadow-[0_20px_55px_rgba(37,99,235,0.16)] dark:border-white/10 dark:bg-slate-900/90 dark:hover:border-cyan-300/30 dark:hover:shadow-[0_20px_55px_rgba(34,211,238,0.12)] sm:w-56">
+      <div className="flex items-center gap-2.5">
+        <div className="h-10 w-10 shrink-0 overflow-hidden rounded-full ring-2 ring-white shadow-md dark:ring-slate-700">
+          <img src={img} alt="" className="h-full w-full object-cover" loading="lazy" />
         </div>
+
         <div className="min-w-0">
-          <p className="flex items-center gap-2 text-sm font-bold text-slate-900 dark:text-slate-50">
-            {role}
+          <p className="flex items-center gap-1.5 text-sm font-semibold text-slate-900 dark:text-slate-50">
+            <span className="truncate">{name}</span>
+            <span className="text-xs">{country}</span>
           </p>
-          <p className="mt-0.5 text-xs font-medium text-slate-500 dark:text-slate-400">{handle}</p>
+          <p className="text-xs font-medium text-slate-500 dark:text-slate-400">{username}</p>
         </div>
       </div>
 
-      <p className="mt-4 text-sm leading-6 text-slate-700 dark:text-slate-300">{body}</p>
-
-      <div className="mt-4 inline-flex rounded-full bg-blue-50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-blue-700 dark:bg-blue-500/10 dark:text-blue-200">
-        {label}
-      </div>
+      <blockquote className="mt-3 text-sm leading-6 text-slate-700 dark:text-slate-300">
+        “{body}”
+      </blockquote>
     </article>
   );
 }
 
 export default function ReviewMarquee() {
+  const reversed = [...testimonials].reverse();
+
   return (
-    <div className="relative h-[430px] w-full overflow-hidden rounded-[2rem] border border-[var(--border)] bg-white shadow-[0_24px_80px_rgba(37,99,235,0.08)] [perspective:380px] dark:bg-[#091221] dark:shadow-[0_24px_80px_rgba(0,0,0,0.24)] sm:h-[470px]">
+    <div className="relative mx-auto flex h-[420px] w-full max-w-[980px] items-center justify-center overflow-hidden rounded-[1.75rem] border border-[var(--border)] bg-white [perspective:300px] shadow-[0_24px_80px_rgba(37,99,235,0.08)] dark:bg-[#091221] dark:shadow-[0_24px_80px_rgba(0,0,0,0.28)] sm:h-[460px]">
       <div
-        className="absolute left-1/2 top-1/2 flex w-[1120px] -translate-x-1/2 -translate-y-1/2 items-center gap-4 sm:w-[1220px]"
+        className="absolute left-1/2 top-1/2 flex w-[1120px] items-center gap-4"
         style={{
           transform:
-            "translate(-50%, -50%) translateX(-40px) translateZ(-105px) rotateX(18deg) rotateY(-9deg) rotateZ(8deg)",
+            "translate(-50%, -50%) translateX(-100px) translateY(0px) translateZ(-100px) rotateX(20deg) rotateY(-10deg) rotateZ(20deg)",
           transformStyle: "preserve-3d",
         }}
       >
-        <Marquee vertical pauseOnHover repeat={3} className="h-[660px] [--duration:40s]" ariaLabel="Candidate and reviewer perspectives column one">
-          {perspectives.map((item, index) => (
-            <PerspectiveCard key={`one-${index}`} {...item} />
+        <Marquee
+          vertical
+          pauseOnHover
+          repeat={3}
+          className="h-[720px] [--duration:40s]"
+          ariaLabel="Testimonials column one"
+        >
+          {testimonials.map((review) => (
+            <TestimonialCard key={`one-${review.username}`} {...review} />
           ))}
         </Marquee>
 
-        <Marquee vertical pauseOnHover reverse repeat={3} className="h-[660px] [--duration:44s]" ariaLabel="Candidate and reviewer perspectives column two">
-          {[...perspectives].reverse().map((item, index) => (
-            <PerspectiveCard key={`two-${index}`} {...item} />
+        <Marquee
+          vertical
+          pauseOnHover
+          reverse
+          repeat={3}
+          className="h-[720px] [--duration:42s]"
+          ariaLabel="Testimonials column two"
+        >
+          {reversed.map((review) => (
+            <TestimonialCard key={`two-${review.username}`} {...review} />
           ))}
         </Marquee>
 
-        <Marquee vertical pauseOnHover repeat={3} className="hidden h-[660px] [--duration:42s] sm:flex" ariaLabel="Candidate and reviewer perspectives column three">
-          {perspectives.map((item, index) => (
-            <PerspectiveCard key={`three-${index}`} {...item} />
+        <Marquee
+          vertical
+          pauseOnHover
+          repeat={3}
+          className="hidden h-[720px] [--duration:44s] sm:flex"
+          ariaLabel="Testimonials column three"
+        >
+          {testimonials.map((review) => (
+            <TestimonialCard key={`three-${review.username}`} {...review} />
           ))}
         </Marquee>
 
-        <Marquee vertical pauseOnHover reverse repeat={3} className="hidden h-[660px] [--duration:46s] lg:flex" ariaLabel="Candidate and reviewer perspectives column four">
-          {[...perspectives].reverse().map((item, index) => (
-            <PerspectiveCard key={`four-${index}`} {...item} />
+        <Marquee
+          vertical
+          pauseOnHover
+          reverse
+          repeat={3}
+          className="hidden h-[720px] [--duration:46s] lg:flex"
+          ariaLabel="Testimonials column four"
+        >
+          {reversed.map((review) => (
+            <TestimonialCard key={`four-${review.username}`} {...review} />
           ))}
         </Marquee>
       </div>
 
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-white via-white/90 to-transparent dark:from-[#091221] dark:via-[#091221]/90" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-white via-white/90 to-transparent dark:from-[#091221] dark:via-[#091221]/90" />
-      <div className="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-white via-white/85 to-transparent dark:from-[#091221] dark:via-[#091221]/85 sm:w-32" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-white via-white/85 to-transparent dark:from-[#091221] dark:via-[#091221]/85 sm:w-32" />
-
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_42%,rgba(59,130,246,0.08),transparent_48%)] dark:bg-[radial-gradient(circle_at_50%_42%,rgba(34,211,238,0.08),transparent_48%)]" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-1/4 bg-gradient-to-b from-white via-white/90 to-transparent dark:from-[#091221] dark:via-[#091221]/92" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-white via-white/90 to-transparent dark:from-[#091221] dark:via-[#091221]/92" />
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-white via-white/90 to-transparent dark:from-[#091221] dark:via-[#091221]/92" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-white via-white/90 to-transparent dark:from-[#091221] dark:via-[#091221]/92" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.08),transparent_55%)] dark:bg-[radial-gradient(circle_at_50%_50%,rgba(34,211,238,0.07),transparent_55%)]" />
     </div>
   );
 }
