@@ -104,40 +104,39 @@ button, input, select, textarea { font: inherit; }
 }
 
 
-@keyframes review-marquee-horizontal {
-  from { transform: translate3d(0, 0, 0); }
-  to { transform: translate3d(calc(-50% - 0.5rem), 0, 0); }
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100% - var(--gap)));
+  }
 }
 
-@keyframes review-marquee-vertical {
-  from { transform: translate3d(0, 0, 0); }
-  to { transform: translate3d(0, calc(-50% - 0.5rem), 0); }
+@keyframes marquee-vertical {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(calc(-100% - var(--gap)));
+  }
 }
 
-.review-marquee-rail {
-  width: max-content;
-  height: max-content;
+.animate-marquee {
+  animation: marquee var(--duration) linear infinite;
   will-change: transform;
   backface-visibility: hidden;
-  transform: translateZ(0);
 }
 
-.review-marquee-horizontal {
-  animation: review-marquee-horizontal var(--duration) linear infinite;
-}
-
-.review-marquee-vertical {
-  animation: review-marquee-vertical var(--duration) linear infinite;
-}
-
-.review-testimonial-card {
+.animate-marquee-vertical {
+  animation: marquee-vertical var(--duration) linear infinite;
+  will-change: transform;
   backface-visibility: hidden;
-  transform: translateZ(0);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .review-marquee-horizontal,
-  .review-marquee-vertical {
-    animation-play-state: paused !important;
+  .animate-marquee,
+  .animate-marquee-vertical {
+    animation-duration: 120s;
   }
 }
