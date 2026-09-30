@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, BadgeCheck, CreditCard, TimerReset, UsersRound, ShieldCheck, BarChart3, Sparkles } from "lucide-react";
 import ThemeFibreArc from "@/components/home/theme-fibre-arc";
+import ReviewMarquee from "@/components/home/review-marquee";
 import { Card } from "@/components/ui/card";
 
 const features = [
@@ -136,6 +137,32 @@ export default function HomePage() {
               <p className="mt-2 text-sm leading-6 text-[var(--muted)]">{text}</p>
             </Card>
           ))}
+        </div>
+      </section>
+
+      <section className="px-4 pb-20 sm:px-6 sm:pb-24">
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-8 grid gap-5 lg:grid-cols-[1fr_.72fr] lg:items-end">
+            <div>
+              <p className="text-sm font-bold uppercase tracking-[0.18em] text-[var(--primary)]">
+                Workflow perspectives
+              </p>
+              <h2 className="mt-3 max-w-3xl text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+                See the platform from every role.
+              </h2>
+            </div>
+
+            <div className="lg:pb-1">
+              <p className="text-sm leading-6 text-[var(--muted)] sm:text-base">
+                A 3D moving review wall showing sample perspectives from Candidate, Reviewer and Administrator workflows. Hover any column to pause and inspect the cards.
+              </p>
+              <p className="mt-2 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--muted)]">
+                Illustrative feedback — not customer endorsements
+              </p>
+            </div>
+          </div>
+
+          <ReviewMarquee />
         </div>
       </section>
     </main>
