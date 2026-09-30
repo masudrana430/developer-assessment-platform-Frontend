@@ -10,6 +10,7 @@ import { apiRequest } from "@/lib/api";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { StatusBadge } from "@/components/status-badge";
 import type { ApiResponse, Attempt, Question } from "@/types";
 
@@ -69,7 +70,7 @@ function AttemptContent() {
       <div className="mt-8">
         {attempt.status === "PENDING_PAYMENT" && <PaymentStep attempt={attempt} loading={checkout.isPending} error={checkout.error} onPay={() => checkout.mutate()} />}
         {attempt.status === "READY" && <ReadyStep attempt={attempt} loading={start.isPending} error={start.error} onStart={() => start.mutate()} />}
-        {attempt.status === "IN_PROGRESS" && <ExecutionStep attemptId={attempt.id} questions={questions} loading={submit.isPending} error={submit.error} onSubmit={() => { if (window.confirm("Submit this attempt? You will not be able to change answers afterwards.")) submit.mutate(); }} />}
+        {attempt.status === "IN_PROGRESS" && <ExecutionStep attemptId={attempt.id} questions={questions} loading={submit.isPending} error={submit.error} onSubmit={() => submit.mutate()} />}
         {(attempt.status === "SUBMITTED" || attempt.status === "UNDER_REVIEW") && <WaitingStep status={attempt.status} />}
         {attempt.status === "EVALUATED" && <ResultStep attempt={attempt} />}
         {attempt.status === "CANCELLED" && <Card><h2 className="font-bold">Attempt cancelled</h2><p className="mt-2 text-sm text-[var(--muted)]">This attempt can no longer be continued.</p></Card>}
@@ -87,7 +88,38 @@ function ReadyStep({ attempt, loading, error, onStart }: { attempt: Attempt; loa
 }
 
 function ExecutionStep({ attemptId, questions, loading, error, onSubmit }: { attemptId: string; questions: Question[]; loading: boolean; error: Error | null; onSubmit: () => void }) {
-  return <div className="space-y-5">{questions.map((question, index) => <QuestionCard key={question.id} attemptId={attemptId} question={question} index={index} />)}<Card className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center"><div><h2 className="font-bold">Ready to submit?</h2><p className="mt-1 text-sm text-[var(--muted)]">Review your answers first. Submission is final.</p></div><Button disabled={loading} onClick={onSubmit}><Send size={16} /> {loading ? "Submitting..." : "Submit attempt"}</Button>{error && <p className="text-sm text-red-600">{error.message}</p>}</Card></div>;
+  return (
+    <div className="space-y-5">
+      {questions.map((question, index) => (
+        <QuestionCard key={question.id} attemptId={attemptId} question={question} index={index} />
+      ))}
+
+      <Card className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+        <div>
+          <h2 className="font-bold">Ready to submit?</h2>
+          <p className="mt-1 text-sm text-[var(--muted)]">Review your answers first. Submission is final.</p>
+          {error && <p className="mt-2 text-sm text-red-600">{error.message}</p>}
+        </div>
+
+        <ConfirmDialog
+          trigger={
+            <button
+              type="button"
+              disabled={loading}
+              className="inline-flex min-h-10 items-center justify-center gap-2 rounded-xl border border-transparent bg-[var(--primary)] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[var(--primary-hover)] disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <Send size={16} /> {loading ? "Submitting..." : "Submit attempt"}
+            </button>
+          }
+          title="Submit this attempt?"
+          description="Your answers will be locked immediately after submission and you will not be able to edit them again."
+          confirmLabel="Submit attempt"
+          cancelLabel="Review answers"
+          onConfirm={onSubmit}
+        />
+      </Card>
+    </div>
+  );
 }
 
 function QuestionCard({ attemptId, question, index }: { attemptId: string; question: Question; index: number }) {
