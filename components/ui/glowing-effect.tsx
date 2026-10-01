@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useCallback, useEffect, useRef } from "react";
+import { memo, useCallback, useEffect, useRef, type CSSProperties } from "react";
 import { animate } from "motion/react";
 import { cn } from "@/lib/utils";
 
@@ -159,7 +159,7 @@ const GlowingEffect = memo(
                       #4c7894 calc(75% / var(--repeating-conic-gradient-times)),
                       #dd7bbb calc(100% / var(--repeating-conic-gradient-times))
                     )`,
-            } as React.CSSProperties
+            } as CSSProperties
           }
           className={cn(
             "pointer-events-none absolute inset-0 rounded-[inherit] opacity-100 transition-opacity",
