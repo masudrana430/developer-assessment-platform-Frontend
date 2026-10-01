@@ -14,6 +14,7 @@ export function Navbar() {
     { href: "/assessments", label: "Assessments" },
     { href: "/features", label: "Features" },
     { href: "/about", label: "About" },
+    { href: "/community", label: "Join Community" },
     { href: "/pricing", label: "Pricing" },
     { href: "/faq", label: "FAQ" },
   ];
