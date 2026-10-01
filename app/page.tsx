@@ -31,35 +31,35 @@ export default function HomePage() {
           <div className="pointer-events-none absolute bottom-0 left-1/3 h-72 w-72 rounded-full bg-blue-400/15 blur-3xl dark:bg-blue-500/10" />
 
           <div className="relative z-10 grid min-h-[680px] items-center gap-12 px-6 py-14 sm:min-h-[720px] sm:px-10 lg:grid-cols-[1.02fr_.98fr] lg:px-14 xl:px-16">
-            <div className="max-w-3xl">
+            <div className="max-w-[42rem]">
               <span className="inline-flex items-center gap-2 rounded-full border border-white/90 bg-white/55 px-3.5 py-1.5 text-sm font-semibold text-blue-700 shadow-lg shadow-blue-200/30 backdrop-blur-xl dark:border-white/20 dark:bg-white/[0.12] dark:text-cyan-100 dark:shadow-blue-950/10"><Sparkles size={14} className="text-cyan-600 dark:text-cyan-200" />
                 Developer Assessment Platform
               </span>
 
-              <h1 className="mt-6 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl xl:text-7xl">
+              <h1 className="mt-6 max-w-[11.5ch] text-4xl font-black leading-[0.98] tracking-[-0.045em] text-slate-950 drop-shadow-[0_1px_0_rgba(255,255,255,0.35)] sm:text-5xl lg:max-w-none lg:text-[3.45rem] xl:text-[3.9rem] dark:text-white dark:drop-shadow-[0_2px_18px_rgba(0,0,0,0.22)]">
                 Assess developer skills with a simple end-to-end workflow.
               </h1>
 
-              <p className="mt-6 max-w-2xl text-base leading-7 text-slate-600 dark:text-slate-200 sm:text-lg">
+              <p className="mt-6 max-w-xl text-base font-medium leading-7 text-slate-700 drop-shadow-[0_1px_0_rgba(255,255,255,0.30)] dark:text-slate-200 dark:drop-shadow-none sm:text-[1.05rem]">
                 Browse assessments, pay securely, complete timed attempts, receive reviewer feedback and manage the platform from one responsive interface.
               </p>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Link
                   href="/assessments"
-                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-slate-950 px-5 py-3 font-semibold text-white shadow-lg shadow-blue-300/30 transition hover:-translate-y-0.5 hover:bg-blue-950 dark:bg-white dark:text-slate-950 dark:shadow-blue-950/20 dark:hover:bg-cyan-50"
+                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-slate-950 px-5 py-3 text-sm font-bold text-white shadow-[0_10px_28px_rgba(15,23,42,0.18)] transition hover:-translate-y-0.5 hover:bg-blue-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 dark:bg-white dark:text-slate-950 dark:shadow-[0_10px_28px_rgba(0,0,0,0.24)] dark:hover:bg-cyan-50"
                 >
                   Browse assessments <ArrowRight size={18} />
                 </Link>
                 <Link
                   href="/register"
-                  className="inline-flex min-h-11 items-center justify-center rounded-xl border border-white/90 bg-white/55 px-5 py-3 font-semibold text-slate-800 shadow-lg shadow-blue-200/25 backdrop-blur-xl transition hover:-translate-y-0.5 hover:bg-white/75 dark:border-white/25 dark:bg-white/[0.12] dark:text-white dark:shadow-blue-950/10 dark:hover:bg-white/[0.18]"
+                  className="inline-flex min-h-12 items-center justify-center rounded-xl border border-white/90 bg-white/68 px-5 py-3 text-sm font-bold text-slate-900 shadow-[0_10px_28px_rgba(37,99,235,0.10)] backdrop-blur-xl transition hover:-translate-y-0.5 hover:bg-white/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/30 dark:border-white/20 dark:bg-white/[0.10] dark:text-white dark:shadow-[0_10px_28px_rgba(0,0,0,0.14)] dark:hover:bg-white/[0.16]"
                 >
                   Create candidate account
                 </Link>
               </div>
 
-              <div className="mt-10 flex flex-wrap gap-x-6 gap-y-3 text-sm text-slate-600 dark:text-slate-200">
+              <div className="mt-9 flex flex-wrap gap-x-5 gap-y-3 text-[0.82rem] font-semibold text-slate-700 dark:text-slate-200 sm:text-sm">
                 <span className="inline-flex items-center gap-2"><BadgeCheck size={16} className="text-blue-600 dark:text-blue-300" /> Real assessments</span>
                 <span className="inline-flex items-center gap-2"><ShieldCheck size={16} className="text-blue-600 dark:text-blue-300" /> Role-protected flows</span>
                 <span className="inline-flex items-center gap-2"><CreditCard size={16} className="text-blue-600 dark:text-blue-300" /> Stripe checkout</span>
