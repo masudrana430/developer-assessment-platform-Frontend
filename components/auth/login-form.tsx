@@ -117,8 +117,8 @@ export function LoginForm() {
 
   return (
     <div className="grid w-full max-w-5xl gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-      <Card className="p-6 sm:p-8">
-        <span className="grid h-11 w-11 place-items-center rounded-xl bg-[var(--muted-bg)] text-[var(--primary)]">
+      <Card className="auth-glass p-6 sm:p-8">
+        <span className="auth-glass-soft grid h-11 w-11 place-items-center rounded-xl border text-[var(--primary)]">
           <LockKeyhole size={20} />
         </span>
         <h1 className="mt-5 text-3xl font-bold tracking-tight">Welcome back 👋</h1>
@@ -127,12 +127,12 @@ export function LoginForm() {
         <form className="mt-6 space-y-4" onSubmit={handleSubmit(onSubmit)} noValidate>
           <label className="block text-sm font-semibold">
             Email
-            <Input className="mt-1.5" type="email" autoComplete="email" {...register("email")} />
+            <Input className="auth-glass-input mt-1.5" type="email" autoComplete="email" {...register("email")} />
             {errors.email ? <span className="mt-1 block text-xs text-red-600">{errors.email.message}</span> : null}
           </label>
           <label className="block text-sm font-semibold">
             Password
-            <Input className="mt-1.5" type="password" autoComplete="current-password" {...register("password")} />
+            <Input className="auth-glass-input mt-1.5" type="password" autoComplete="current-password" {...register("password")} />
             {errors.password ? <span className="mt-1 block text-xs text-red-600">{errors.password.message}</span> : null}
           </label>
           <Button className="w-full" disabled={isSubmitting}>
@@ -142,7 +142,7 @@ export function LoginForm() {
         </form>
       </Card>
 
-      <Card className="p-6 sm:p-8">
+      <Card className="auth-glass p-6 sm:p-8">
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--primary)]">Quick Demo Login</p>
         <h2 className="mt-2 text-2xl font-bold">One click. Three roles.</h2>
         <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
@@ -156,9 +156,9 @@ export function LoginForm() {
               type="button"
               disabled={isSubmitting}
               onClick={() => void demoLogin(role)}
-              className="group flex min-h-28 items-start gap-4 rounded-2xl border border-[var(--border)] bg-[var(--input-bg)] p-4 text-left transition hover:border-[var(--primary)] hover:bg-[var(--muted-bg)] disabled:opacity-50"
+              className="auth-glass-soft group flex min-h-28 items-start gap-4 rounded-2xl border p-4 text-left transition hover:-translate-y-0.5 hover:border-[var(--primary)] disabled:opacity-50"
             >
-              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[var(--muted-bg)] text-[var(--primary)]">
+              <span className="auth-glass-soft grid h-10 w-10 shrink-0 place-items-center rounded-xl border text-[var(--primary)]">
                 <Icon size={18} />
               </span>
               <span>
