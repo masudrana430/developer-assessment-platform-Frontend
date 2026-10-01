@@ -1,21 +1,12 @@
 import Link from "next/link";
-import { ArrowRight, BadgeCheck, CreditCard, TimerReset, UsersRound, ShieldCheck, BarChart3, Sparkles } from "lucide-react";
+import { ArrowRight, BadgeCheck, CreditCard, TimerReset, UsersRound, ShieldCheck, Sparkles } from "lucide-react";
 import ThemeFibreArc from "@/components/home/theme-fibre-arc";
 import GravityContact from "@/components/home/gravity-contact";
 import AssessmentJourney from "@/components/home/assessment-journey";
 import RoleWorkspaceSwitcher from "@/components/home/role-workspace-switcher";
 import PlatformPulse from "@/components/home/platform-pulse";
 import TrustControlMap from "@/components/home/trust-control-map";
-import { Card } from "@/components/ui/card";
-
-const features = [
-  { icon: TimerReset, title: "Timed assessments", text: "Candidates start secure, timed attempts with auto-saved answers." },
-  { icon: CreditCard, title: "Stripe Checkout", text: "Paid assessments use a real Stripe-hosted checkout workflow." },
-  { icon: UsersRound, title: "Three clear roles", text: "Purpose-built experiences for Candidates, Reviewers and Admins." },
-  { icon: BadgeCheck, title: "Structured grading", text: "MCQs are auto-scored while reviewers grade subjective responses." },
-  { icon: ShieldCheck, title: "Protected workflows", text: "Role checks, state transitions and audit trails are enforced by the API." },
-  { icon: BarChart3, title: "Operational visibility", text: "Admin statistics and audit logs make the platform easy to supervise." },
-];
+import FeatureMagicBento from "@/components/home/feature-magic-bento";
 
 const workflow = [
   "Choose a published assessment",
@@ -133,15 +124,7 @@ export default function HomePage() {
       </section>
 
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20">
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {features.map(({ icon: Icon, title, text }) => (
-            <Card key={title}>
-              <Icon className="text-[var(--primary)]" size={22} />
-              <h2 className="mt-4 text-lg font-bold">{title}</h2>
-              <p className="mt-2 text-sm leading-6 text-[var(--muted)]">{text}</p>
-            </Card>
-          ))}
-        </div>
+        <FeatureMagicBento />
       </section>
 
       <AssessmentJourney />
