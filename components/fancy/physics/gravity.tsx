@@ -128,7 +128,7 @@ export default function Gravity({
   addTopWall = true,
 }: GravityProps) {
   const canvasRef = useRef<HTMLDivElement>(null);
-  const engineRef = useRef<Matter.Engine | null>(null);
+  const engineRef = useRef<Matter.Engine | null>(Engine.create());
   const renderRef = useRef<Matter.Render | null>(null);
   const runnerRef = useRef<Matter.Runner | null>(null);
   const mouseConstraintRef = useRef<Matter.MouseConstraint | null>(null);
@@ -202,10 +202,10 @@ export default function Gravity({
       const height = host.offsetHeight;
       if (!width || !height) return;
 
-      const engine = Engine.create();
+      const engine = engineRef.current ?? Engine.create();
+      engineRef.current = engine;
       engine.gravity.x = gravity.x;
       engine.gravity.y = gravity.y;
-      engineRef.current = engine;
 
       const render = Render.create({
         element: host,
