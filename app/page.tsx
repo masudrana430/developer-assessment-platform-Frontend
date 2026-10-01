@@ -2,6 +2,10 @@ import Link from "next/link";
 import { ArrowRight, BadgeCheck, CreditCard, TimerReset, UsersRound, ShieldCheck, BarChart3, Sparkles } from "lucide-react";
 import ThemeFibreArc from "@/components/home/theme-fibre-arc";
 import GravityContact from "@/components/home/gravity-contact";
+import AssessmentJourney from "@/components/home/assessment-journey";
+import RoleWorkspaceSwitcher from "@/components/home/role-workspace-switcher";
+import PlatformPulse from "@/components/home/platform-pulse";
+import TrustControlMap from "@/components/home/trust-control-map";
 import { Card } from "@/components/ui/card";
 
 const features = [
@@ -140,6 +144,10 @@ export default function HomePage() {
         </div>
       </section>
 
+      <AssessmentJourney />
+      <RoleWorkspaceSwitcher />
+      <PlatformPulse />
+      <TrustControlMap />
       <GravityContact />
     </main>
   );
