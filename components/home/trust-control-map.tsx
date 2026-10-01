@@ -8,7 +8,6 @@ import {
   ShieldCheck,
   Workflow,
 } from "lucide-react";
-import TrustCursorBackground from "@/components/home/trust-cursor-background";
 
 const controls = [
   {
@@ -55,9 +54,9 @@ export default function TrustControlMap() {
         </div>
 
         <div className="relative overflow-hidden rounded-[2rem] border border-[var(--border)] bg-[#071426] p-6 text-white shadow-2xl shadow-blue-950/15 sm:p-8 lg:p-10">
-          <TrustCursorBackground />
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(59,130,246,0.20),transparent_32%),radial-gradient(circle_at_85%_15%,rgba(34,211,238,0.10),transparent_24%)]" />
 
-          <div className="relative z-10 grid gap-6 lg:grid-cols-[0.72fr_1.28fr] lg:items-center">
+          <div className="relative grid gap-6 lg:grid-cols-[0.72fr_1.28fr] lg:items-center">
             <div className="relative mx-auto grid h-64 w-64 place-items-center sm:h-72 sm:w-72">
               <div className="absolute inset-5 rounded-full border border-dashed border-cyan-200/20 animate-[spin_24s_linear_infinite]" />
               <div className="absolute inset-12 rounded-full border border-blue-300/15 animate-[spin_18s_linear_infinite_reverse]" />
