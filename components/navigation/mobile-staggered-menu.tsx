@@ -454,7 +454,9 @@ export default function MobileStaggeredMenu({
   }
 
   return (
-    <div
+    <>
+      <div className="h-16 lg:hidden" aria-hidden="true" />
+      <div
       className="mobile-staggered-menu"
       data-open={open || undefined}
       data-position="right"
@@ -610,6 +612,7 @@ export default function MobileStaggeredMenu({
           </div>
         </div>
       </aside>
-    </div>
+      </div>
+    </>
   );
 }
