@@ -40,7 +40,9 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  if ((pathname === "/login" || pathname === "/register") && hasSession && role) {
+  // Keep the login page accessible even when a session cookie exists.
+  // This is useful for switching accounts, demo logins and direct login-page access.
+  if (pathname === "/register" && hasSession && role) {
     return NextResponse.redirect(new URL(dashboardFor(role), request.url));
   }
 
