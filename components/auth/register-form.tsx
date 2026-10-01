@@ -57,8 +57,8 @@ export function RegisterForm() {
   }
 
   return (
-    <Card className="w-full max-w-lg p-6 sm:p-8">
-      <span className="grid h-11 w-11 place-items-center rounded-xl bg-[var(--muted-bg)] text-[var(--primary)]">
+    <Card className="auth-glass w-full max-w-lg p-6 sm:p-8">
+      <span className="auth-glass-soft grid h-11 w-11 place-items-center rounded-xl border text-[var(--primary)]">
         <UserPlus size={20} />
       </span>
       <h1 className="mt-5 text-3xl font-bold tracking-tight">Create candidate account</h1>
@@ -68,13 +68,13 @@ export function RegisterForm() {
 
       <form className="mt-6 space-y-4" onSubmit={handleSubmit(onSubmit)} noValidate>
         <Field label="Name" error={errors.name?.message}>
-          <Input autoComplete="name" {...register("name")} />
+          <Input className="auth-glass-input" autoComplete="name" {...register("name")} />
         </Field>
         <Field label="Email" error={errors.email?.message}>
-          <Input type="email" autoComplete="email" {...register("email")} />
+          <Input className="auth-glass-input" type="email" autoComplete="email" {...register("email")} />
         </Field>
         <Field label="Password" error={errors.password?.message}>
-          <Input type="password" autoComplete="new-password" {...register("password")} />
+          <Input className="auth-glass-input" type="password" autoComplete="new-password" {...register("password")} />
         </Field>
         <Button className="w-full" disabled={isSubmitting}>
           {isSubmitting ? <LoaderCircle className="animate-spin" size={16} /> : <UserPlus size={16} />}
