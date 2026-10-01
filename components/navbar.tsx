@@ -13,18 +13,17 @@ import {
   LayoutDashboard,
   LogIn,
   LogOut,
-  Menu,
   PanelsTopLeft,
   Shield,
   Sparkles,
   UserPlus,
   UserRound,
   UsersRound,
-  X,
   type LucideIcon,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-provider";
 import { useAuth } from "@/components/auth-provider";
+import StaggeredMenuToggle from "@/components/navigation/staggered-menu-toggle";
 
 type NavItem = {
   href: string;
@@ -220,15 +219,10 @@ export function Navbar() {
               </button>
             )}
 
-            <button
-              type="button"
-              className="grid h-10 w-10 place-items-center rounded-xl border border-[var(--border)]"
-              onClick={() => setOpen((value) => !value)}
-              aria-label="Open menu"
-              aria-expanded={open}
-            >
-              {open ? <X size={20} /> : <Menu size={20} />}
-            </button>
+            <StaggeredMenuToggle
+              open={open}
+              onToggle={() => setOpen((value) => !value)}
+            />
           </div>
         </div>
 
