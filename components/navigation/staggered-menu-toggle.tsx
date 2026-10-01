@@ -47,7 +47,9 @@ export default function StaggeredMenuToggle({
       overwrite: "auto",
     });
 
-    return () => tween.kill();
+    return () => {
+      tween.kill();
+    };
   }, [open]);
 
   return (
