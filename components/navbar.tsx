@@ -1,31 +1,89 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { Menu, X, LogOut, LayoutDashboard, ClipboardList, UserRound, Shield, CheckSquare } from "lucide-react";
+import {
+  BadgeDollarSign,
+  CheckSquare,
+  CircleHelp,
+  ClipboardList,
+  Home,
+  Info,
+  LayoutDashboard,
+  LogIn,
+  LogOut,
+  Menu,
+  PanelsTopLeft,
+  Shield,
+  Sparkles,
+  UserPlus,
+  UserRound,
+  UsersRound,
+  X,
+  type LucideIcon,
+} from "lucide-react";
 import { ThemeToggle } from "@/components/theme-provider";
 import { useAuth } from "@/components/auth-provider";
 
+type NavItem = {
+  href: string;
+  label: string;
+  icon: LucideIcon;
+};
+
 export function Navbar() {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
   const { user, logout } = useAuth();
 
-  const primaryLinks = [
-    { href: "/assessments", label: "Assessments" },
-    { href: "/features", label: "Features" },
-    { href: "/about", label: "About" },
-    { href: "/community", label: "Join Community" },
-    { href: "/pricing", label: "Pricing" },
-    { href: "/faq", label: "FAQ" },
+  const primaryLinks: NavItem[] = [
+    { href: "/", label: "Home", icon: Home },
+    { href: "/assessments", label: "Assessments", icon: ClipboardList },
+    { href: "/features", label: "Features", icon: Sparkles },
+    { href: "/community", label: "Join Community", icon: UsersRound },
+    { href: "/about", label: "About", icon: Info },
+    { href: "/pricing", label: "Pricing", icon: BadgeDollarSign },
+    { href: "/faq", label: "FAQ", icon: CircleHelp },
   ];
 
-  const roleLinks = [
-    { href: "/attempts", label: "My attempts", icon: CheckSquare, show: user?.role === "CANDIDATE" },
-    { href: "/reviewer", label: "Reviewer", icon: CheckSquare, show: user?.role === "REVIEWER" },
-    { href: "/admin", label: "Admin", icon: Shield, show: user?.role === "ADMIN" },
-    { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, show: user?.role === "CANDIDATE" },
-    { href: "/profile", label: "Profile", icon: UserRound, show: Boolean(user) },
+  const roleLinks: Array<NavItem & { show: boolean }> = [
+    {
+      href: "/attempts",
+      label: "My attempts",
+      icon: CheckSquare,
+      show: user?.role === "CANDIDATE",
+    },
+    {
+      href: "/reviewer",
+      label: "Reviewer",
+      icon: PanelsTopLeft,
+      show: user?.role === "REVIEWER",
+    },
+    {
+      href: "/admin",
+      label: "Admin",
+      icon: Shield,
+      show: user?.role === "ADMIN",
+    },
+    {
+      href: "/dashboard",
+      label: "Dashboard",
+      icon: LayoutDashboard,
+      show: user?.role === "CANDIDATE",
+    },
+    {
+      href: "/profile",
+      label: "Profile",
+      icon: UserRound,
+      show: Boolean(user),
+    },
   ].filter((item) => item.show);
+
+  const isActive = (href: string) => {
+    if (href === "/") return pathname === "/";
+    return pathname === href || pathname.startsWith(href + "/");
+  };
 
   async function signOut() {
     await logout();
@@ -33,79 +91,215 @@ export function Navbar() {
     window.location.assign("/");
   }
 
+  function DesktopItem({ item }: { item: NavItem }) {
+    const Icon = item.icon;
+    const active = isActive(item.href);
+
+    return (
+      <Link
+        href={item.href}
+        aria-label={item.label}
+        aria-current={active ? "page" : undefined}
+        className={[
+          "group relative grid h-12 w-12 place-items-center rounded-full transition-all duration-200",
+          active
+            ? "bg-[var(--foreground)] text-[var(--background)] shadow-lg"
+            : "text-[var(--foreground)] hover:bg-[var(--muted-bg)]",
+        ].join(" ")}
+      >
+        <Icon size={23} strokeWidth={active ? 2.25 : 2} />
+        <span className="pointer-events-none absolute left-[3.8rem] z-[70] whitespace-nowrap rounded-lg bg-slate-950 px-2.5 py-1.5 text-xs font-semibold text-white opacity-0 shadow-xl transition duration-150 group-hover:translate-x-0.5 group-hover:opacity-100 dark:bg-white dark:text-slate-950">
+          {item.label}
+        </span>
+      </Link>
+    );
+  }
+
   return (
-    <header className="sticky top-0 z-40 border-b border-[var(--border)] bg-[color:var(--card)]/95 backdrop-blur">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
-        <Link href="/" onClick={() => setOpen(false)} className="flex items-center gap-2 font-bold tracking-tight">
-          <span className="grid h-9 w-9 place-items-center rounded-xl bg-[var(--primary)] text-sm text-white">DA</span>
-          <span>DevAssess</span>
+    <>
+      <aside className="fixed inset-y-0 left-0 z-50 hidden w-20 flex-col items-center border-r border-[var(--border)] bg-[color:var(--card)]/95 px-3 py-3 backdrop-blur-xl lg:flex">
+        <Link
+          href="/"
+          aria-label="DevAssess home"
+          className="mb-2 grid h-12 w-12 place-items-center rounded-full bg-[var(--primary)] text-sm font-black tracking-tight text-white shadow-lg shadow-blue-500/20 transition hover:scale-105"
+        >
+          DA
         </Link>
 
-        <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary navigation">
+        <nav
+          className="flex min-h-0 flex-1 flex-col items-center gap-1 overflow-y-auto py-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          aria-label="Primary navigation"
+        >
           {primaryLinks.map((item) => (
-            <Link key={item.href} href={item.href} className="rounded-lg px-3 py-2 text-sm font-medium text-[var(--muted)] transition hover:bg-[var(--muted-bg)] hover:text-[var(--foreground)]">
-              {item.label}
-            </Link>
+            <DesktopItem key={item.href} item={item} />
           ))}
-          {roleLinks.slice(0, 2).map(({ href, label }) => (
-            <Link key={href} href={href} className="rounded-lg px-3 py-2 text-sm font-medium text-[var(--muted)] transition hover:bg-[var(--muted-bg)] hover:text-[var(--foreground)]">
-              {label}
-            </Link>
-          ))}
+
+          {roleLinks.length ? (
+            <>
+              <div className="my-1 h-px w-8 bg-[var(--border)]" />
+              {roleLinks.map((item) => (
+                <DesktopItem key={item.href} item={item} />
+              ))}
+            </>
+          ) : null}
         </nav>
 
-        <div className="flex items-center gap-2">
-          <ThemeToggle />
+        <div className="mt-2 flex flex-col items-center gap-2">
+          <div className="[&_button]:h-12 [&_button]:w-12 [&_button]:rounded-full">
+            <ThemeToggle />
+          </div>
+
           {!user ? (
-            <Link href="/login" className="hidden rounded-xl bg-[var(--primary)] px-4 py-2 text-sm font-semibold text-white sm:inline-flex">
-              Sign in
-            </Link>
+            <>
+              <Link
+                href="/login"
+                aria-label="Sign in"
+                className="group relative grid h-12 w-12 place-items-center rounded-full border border-[var(--border)] text-[var(--foreground)] transition hover:bg-[var(--muted-bg)]"
+              >
+                <LogIn size={21} />
+                <span className="pointer-events-none absolute left-[3.8rem] z-[70] whitespace-nowrap rounded-lg bg-slate-950 px-2.5 py-1.5 text-xs font-semibold text-white opacity-0 shadow-xl transition group-hover:opacity-100 dark:bg-white dark:text-slate-950">
+                  Sign in
+                </span>
+              </Link>
+
+              <Link
+                href="/register"
+                aria-label="Create account"
+                className="group relative grid h-12 w-12 place-items-center rounded-full bg-[var(--primary)] text-white shadow-lg shadow-blue-500/20 transition hover:bg-[var(--primary-hover)]"
+              >
+                <UserPlus size={21} />
+                <span className="pointer-events-none absolute left-[3.8rem] z-[70] whitespace-nowrap rounded-lg bg-slate-950 px-2.5 py-1.5 text-xs font-semibold text-white opacity-0 shadow-xl transition group-hover:opacity-100 dark:bg-white dark:text-slate-950">
+                  Create account
+                </span>
+              </Link>
+            </>
           ) : (
-            <button onClick={() => void signOut()} className="hidden h-10 items-center gap-2 rounded-xl border border-[var(--border)] px-3 text-sm font-semibold sm:inline-flex">
-              <LogOut size={16} /> Logout
+            <button
+              type="button"
+              onClick={() => void signOut()}
+              aria-label="Logout"
+              className="group relative grid h-12 w-12 place-items-center rounded-full border border-[var(--border)] text-[var(--foreground)] transition hover:bg-[var(--muted-bg)]"
+            >
+              <LogOut size={21} />
+              <span className="pointer-events-none absolute left-[3.8rem] z-[70] whitespace-nowrap rounded-lg bg-slate-950 px-2.5 py-1.5 text-xs font-semibold text-white opacity-0 shadow-xl transition group-hover:opacity-100 dark:bg-white dark:text-slate-950">
+                Logout
+              </span>
             </button>
           )}
-          <button
-            type="button"
-            className="grid h-10 w-10 place-items-center rounded-xl border border-[var(--border)] lg:hidden"
-            onClick={() => setOpen((value) => !value)}
-            aria-label="Open menu"
-            aria-expanded={open}
-          >
-            {open ? <X size={20} /> : <Menu size={20} />}
-          </button>
         </div>
-      </div>
+      </aside>
 
-      {open ? (
-        <div className="border-t border-[var(--border)] bg-[var(--card)] px-4 py-3 lg:hidden">
-          <nav className="mx-auto grid max-w-7xl gap-1" aria-label="Mobile navigation">
-            {primaryLinks.map((item) => (
-              <Link key={item.href} href={item.href} onClick={() => setOpen(false)} className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium hover:bg-[var(--muted-bg)]">
-                <ClipboardList size={17} /> {item.label}
-              </Link>
-            ))}
-            {roleLinks.map((item) => {
-              const Icon = item.icon;
-              return (
-                <Link key={item.href} href={item.href} onClick={() => setOpen(false)} className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium hover:bg-[var(--muted-bg)]">
-                  <Icon size={17} /> {item.label}
-                </Link>
-              );
-            })}
+      <header className="sticky top-0 z-40 border-b border-[var(--border)] bg-[color:var(--card)]/95 backdrop-blur lg:hidden">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
+          <Link
+            href="/"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-2 font-bold tracking-tight"
+          >
+            <span className="grid h-9 w-9 place-items-center rounded-xl bg-[var(--primary)] text-sm text-white">
+              DA
+            </span>
+            <span>DevAssess</span>
+          </Link>
+
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
             {!user ? (
-              <>
-                <Link href="/login" onClick={() => setOpen(false)} className="rounded-xl px-3 py-3 text-sm font-semibold hover:bg-[var(--muted-bg)]">Sign in</Link>
-                <Link href="/register" onClick={() => setOpen(false)} className="rounded-xl bg-[var(--primary)] px-3 py-3 text-center text-sm font-semibold text-white">Create account</Link>
-              </>
+              <Link
+                href="/login"
+                className="hidden rounded-xl bg-[var(--primary)] px-4 py-2 text-sm font-semibold text-white sm:inline-flex"
+              >
+                Sign in
+              </Link>
             ) : (
-              <button onClick={() => void signOut()} className="flex items-center gap-3 rounded-xl px-3 py-3 text-left text-sm font-semibold hover:bg-[var(--muted-bg)]">
-                <LogOut size={17} /> Logout
+              <button
+                onClick={() => void signOut()}
+                className="hidden h-10 items-center gap-2 rounded-xl border border-[var(--border)] px-3 text-sm font-semibold sm:inline-flex"
+              >
+                <LogOut size={16} /> Logout
               </button>
             )}
-          </nav>
+
+            <button
+              type="button"
+              className="grid h-10 w-10 place-items-center rounded-xl border border-[var(--border)]"
+              onClick={() => setOpen((value) => !value)}
+              aria-label="Open menu"
+              aria-expanded={open}
+            >
+              {open ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
         </div>
-      ) : null}
-    </header>
+
+        {open ? (
+          <div className="border-t border-[var(--border)] bg-[var(--card)] px-4 py-3">
+            <nav
+              className="mx-auto grid max-w-7xl gap-1"
+              aria-label="Mobile navigation"
+            >
+              {primaryLinks.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setOpen(false)}
+                    className={[
+                      "flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition hover:bg-[var(--muted-bg)]",
+                      isActive(item.href)
+                        ? "bg-[var(--muted-bg)] text-[var(--foreground)]"
+                        : "",
+                    ].join(" ")}
+                  >
+                    <Icon size={17} /> {item.label}
+                  </Link>
+                );
+              })}
+
+              {roleLinks.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setOpen(false)}
+                    className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium hover:bg-[var(--muted-bg)]"
+                  >
+                    <Icon size={17} /> {item.label}
+                  </Link>
+                );
+              })}
+
+              {!user ? (
+                <>
+                  <Link
+                    href="/login"
+                    onClick={() => setOpen(false)}
+                    className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold hover:bg-[var(--muted-bg)]"
+                  >
+                    <LogIn size={17} /> Sign in
+                  </Link>
+                  <Link
+                    href="/register"
+                    onClick={() => setOpen(false)}
+                    className="flex items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-3 py-3 text-center text-sm font-semibold text-white"
+                  >
+                    <UserPlus size={17} /> Create account
+                  </Link>
+                </>
+              ) : (
+                <button
+                  onClick={() => void signOut()}
+                  className="flex items-center gap-3 rounded-xl px-3 py-3 text-left text-sm font-semibold hover:bg-[var(--muted-bg)]"
+                >
+                  <LogOut size={17} /> Logout
+                </button>
+              )}
+            </nav>
+          </div>
+        ) : null}
+      </header>
+    </>
   );
 }
