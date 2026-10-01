@@ -51,7 +51,6 @@ export default function MobileStaggeredMenu({
   const textCycleAnimRef = useRef<gsap.core.Tween | null>(null);
   const busyRef = useRef(false);
 
-  const position = "right";
   const colors = ["#bfdbfe", "#60a5fa", "#2563eb"];
 
   useLayoutEffect(() => {
@@ -75,7 +74,7 @@ export default function MobileStaggeredMenu({
 
       preLayerElsRef.current = preLayers;
 
-      const offscreen = position === "left" ? -100 : 100;
+      const offscreen = 100;
       gsap.set([panel, ...preLayers], {
         xPercent: offscreen,
         opacity: 1,
@@ -136,7 +135,7 @@ export default function MobileStaggeredMenu({
       ),
     );
 
-    const offscreen = position === "left" ? -100 : 100;
+    const offscreen = 100;
     const layerStates = layers.map((element) => ({
       element,
       start: offscreen,
@@ -281,7 +280,7 @@ export default function MobileStaggeredMenu({
 
     closeTweenRef.current?.kill();
 
-    const offscreen = position === "left" ? -100 : 100;
+    const offscreen = 100;
 
     closeTweenRef.current = gsap.to([...layers, panel], {
       xPercent: offscreen,
@@ -458,7 +457,7 @@ export default function MobileStaggeredMenu({
     <div
       className="mobile-staggered-menu"
       data-open={open || undefined}
-      data-position={position}
+      data-position="right"
       style={accentStyle}
     >
       <div
