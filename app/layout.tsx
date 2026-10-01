@@ -28,8 +28,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body>
         <Providers>
           <Navbar />
-          {children}
-          <Footer />
+          <div className="lg:pl-20">
+            {children}
+            <Footer />
+          </div>
         </Providers>
       </body>
     </html>
