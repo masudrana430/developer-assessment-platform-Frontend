@@ -65,7 +65,6 @@ export default function LoginLiquidBackground() {
           </ellipse>
         </g>
 
-        <rect width="1440" height="900" fill="url(#login-light-wash)" opacity="0" />
       </svg>
 
       <svg
