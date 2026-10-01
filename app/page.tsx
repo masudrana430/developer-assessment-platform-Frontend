@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, BadgeCheck, CreditCard, TimerReset, UsersRound, ShieldCheck, BarChart3, Sparkles } from "lucide-react";
 import ThemeFibreArc from "@/components/home/theme-fibre-arc";
+import GravityContact from "@/components/home/gravity-contact";
 import { Card } from "@/components/ui/card";
 
 const features = [
@@ -139,6 +140,7 @@ export default function HomePage() {
         </div>
       </section>
 
+      <GravityContact />
     </main>
   );
 }
