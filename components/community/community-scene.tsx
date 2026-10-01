@@ -6,6 +6,8 @@ import Gravity, {
   MatterBody,
 } from "@/components/fancy/physics/cursor-attractor-and-gravity";
 import useScreenSize from "@/hooks/use-screen-size";
+import GlowCursor from "@/components/reactbits/glow-cursor/GlowCursor";
+import { useTheme } from "@/components/theme-provider";
 
 function seeded(index: number, salt: number) {
   const value = Math.sin(index * 12.9898 + salt * 78.233) * 43758.5453;
@@ -14,6 +16,7 @@ function seeded(index: number, salt: number) {
 
 export default function CommunityScene() {
   const screenSize = useScreenSize();
+  const { theme } = useTheme();
 
   const getImageCount = () => {
     if (screenSize.lessThan("sm")) return 50;
@@ -40,9 +43,30 @@ export default function CommunityScene() {
 
   return (
     <main className="relative min-h-[calc(100vh-65px)] overflow-hidden bg-white dark:bg-[#07111f]">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_28%_48%,rgba(37,99,235,0.11),transparent_32%),radial-gradient(circle_at_76%_35%,rgba(34,211,238,0.09),transparent_28%)] dark:bg-[radial-gradient(circle_at_28%_48%,rgba(59,130,246,0.18),transparent_34%),radial-gradient(circle_at_76%_35%,rgba(34,211,238,0.10),transparent_30%)]" />
+      <GlowCursor
+        className="min-h-[calc(100vh-65px)]"
+        color="#67E8F9"
+        secondaryColor="#A78BFA"
+        trailLength={screenSize.lessThan("sm") ? 28 : 40}
+        trailWidth={screenSize.lessThan("sm") ? 6 : 8}
+        trailTaper={0.8}
+        followSpeed={0.16}
+        glowIntensity={1.9}
+        glowSpread={1.2}
+        hotspot={0.65}
+        brightness={1.25}
+        opacity={theme === "dark" ? 1 : 0.72}
+        pulseSpeed={1.1}
+        noiseStrength={0.035}
+        idleFade
+        idleTimeout={700}
+        fadeDuration={900}
+        blendMode={theme === "dark" ? "screen" : "normal"}
+        maxDevicePixelRatio={1.5}
+      >
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_28%_48%,rgba(37,99,235,0.11),transparent_32%),radial-gradient(circle_at_76%_35%,rgba(34,211,238,0.09),transparent_28%)] dark:bg-[radial-gradient(circle_at_28%_48%,rgba(59,130,246,0.18),transparent_34%),radial-gradient(circle_at_76%_35%,rgba(34,211,238,0.10),transparent_30%)]" />
 
-      <div className="relative min-h-[calc(100vh-65px)]">
+        <div className="relative min-h-[calc(100vh-65px)]">
         <Gravity
           attractorPoint={{
             x: screenSize.lessThan("md") ? "50%" : "33%",
@@ -137,7 +161,8 @@ export default function CommunityScene() {
             </p>
           </div>
         </section>
-      </div>
+        </div>
+      </GlowCursor>
     </main>
   );
 }
