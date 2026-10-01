@@ -57,7 +57,7 @@ const topics = [
 export default function GravityContact() {
   return (
     <section id="contact" className="px-4 pb-4 sm:px-6 sm:pb-6">
-      <div className="relative mx-auto min-h-[660px] max-w-7xl overflow-hidden rounded-[2rem] border border-[var(--border)] bg-white shadow-[0_24px_80px_rgba(37,99,235,0.08)] dark:bg-[#071426] dark:shadow-[0_24px_80px_rgba(0,0,0,0.24)]">
+      <div className="relative mx-auto min-h-[760px] max-w-7xl overflow-hidden rounded-[2rem] border border-[var(--border)] bg-white shadow-[0_24px_80px_rgba(37,99,235,0.08)] dark:bg-[#071426] dark:shadow-[0_24px_80px_rgba(0,0,0,0.24)] sm:min-h-[800px]">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_12%,rgba(59,130,246,0.12),transparent_28%),radial-gradient(circle_at_82%_18%,rgba(34,211,238,0.10),transparent_26%)] dark:bg-[radial-gradient(circle_at_18%_12%,rgba(59,130,246,0.18),transparent_28%),radial-gradient(circle_at_82%_18%,rgba(34,211,238,0.12),transparent_26%)]" />
 
         <div className="relative z-20 mx-auto max-w-4xl px-6 pt-12 text-center sm:px-10 sm:pt-16">
