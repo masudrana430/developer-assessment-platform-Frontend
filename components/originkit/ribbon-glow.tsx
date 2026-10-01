@@ -11,12 +11,12 @@ const LAYERS = 84;
 const TWIST = 1.25;
 const DRAG = 0.18;
 
-const VERT_SRC = \`#version 300 es
+const VERT_SRC = `#version 300 es
 const vec2 P[3] = vec2[3](vec2(-1.0, -1.0), vec2(3.0, -1.0), vec2(-1.0, 3.0));
 void main() { gl_Position = vec4(P[gl_VertexID], 0.0, 1.0); }
-\`;
+`;
 
-const FIELD_SRC = \`#version 300 es
+const FIELD_SRC = `#version 300 es
 precision highp float;
 uniform vec2 uRes;
 uniform float uTime;
@@ -31,9 +31,9 @@ uniform vec2 uVel;
 out vec4 o;
 
 const float TAU = 6.28318530718;
-const float LAYERS = \${LAYERS.toFixed(1)};
-const float TWIST = \${TWIST.toFixed(3)};
-const float DRAG = \${DRAG.toFixed(3)};
+const float LAYERS = ${LAYERS.toFixed(1)};
+const float TWIST = ${TWIST.toFixed(3)};
+const float DRAG = ${DRAG.toFixed(3)};
 const float GAIN = 0.62;
 const vec2 CENTRE = vec2(-0.62, 0.24);
 const float TILT = 0.6;
@@ -85,9 +85,9 @@ void main() {
   col *= 1.0 - smoothstep(0.5, 1.6, length(pos)) * 0.07;
   o = vec4(col, 1.0);
 }
-\`;
+`;
 
-const FINISH_SRC = \`#version 300 es
+const FINISH_SRC = `#version 300 es
 precision highp float;
 uniform sampler2D uField;
 uniform vec2 uRes;
@@ -109,7 +109,7 @@ void main() {
   col += (ign(frag, floor(uTime * 24.0)) - 0.5) / 255.0;
   o = vec4(clamp(col, 0.0, 1.0), 1.0);
 }
-\`;
+`;
 
 type RGB = [number, number, number];
 
@@ -183,7 +183,7 @@ function link(gl: WebGL2RenderingContext, frag: string, label: string): WebGLPro
     gl.shaderSource(sh, src);
     gl.compileShader(sh);
     if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) {
-      console.error(\`\${NAME} \${label} shader:\`, gl.getShaderInfoLog(sh));
+      console.error(`${NAME} ${label} shader:`, gl.getShaderInfoLog(sh));
       gl.deleteShader(sh);
       return null;
     }
@@ -200,7 +200,7 @@ function link(gl: WebGL2RenderingContext, frag: string, label: string): WebGLPro
   gl.deleteShader(vs);
   gl.deleteShader(fs);
   if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
-    console.error(\`\${NAME} \${label} link:\`, gl.getProgramInfoLog(prog));
+    console.error(`${NAME} ${label} link:`, gl.getProgramInfoLog(prog));
     gl.deleteProgram(prog);
     return null;
   }
@@ -341,7 +341,7 @@ export default function RibbonGlow(props: RibbonGlowProps) {
       stencil: false,
     });
     if (!gl) {
-      console.error(\`\${NAME}: WebGL2 unavailable\`);
+      console.error(`${NAME}: WebGL2 unavailable`);
       return;
     }
 
