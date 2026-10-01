@@ -101,13 +101,13 @@ export function Navbar() {
         aria-label={item.label}
         aria-current={active ? "page" : undefined}
         className={[
-          "group relative grid h-12 w-12 place-items-center rounded-full transition-all duration-200",
+          "group relative grid h-11 w-11 place-items-center rounded-2xl border transition-all duration-200",
           active
-            ? "bg-[var(--foreground)] text-[var(--background)] shadow-lg"
-            : "text-[var(--foreground)] hover:bg-[var(--muted-bg)]",
+            ? "border-blue-500/70 bg-blue-600 text-white shadow-[0_8px_24px_rgba(37,99,235,0.28)] ring-1 ring-blue-400/20 dark:border-blue-400/50 dark:bg-blue-500 dark:shadow-[0_8px_28px_rgba(37,99,235,0.30)]"
+            : "border-transparent text-slate-600 hover:border-blue-200/70 hover:bg-blue-50 hover:text-blue-700 dark:text-slate-300 dark:hover:border-white/10 dark:hover:bg-white/[0.07] dark:hover:text-cyan-100",
         ].join(" ")}
       >
-        <Icon size={23} strokeWidth={active ? 2.25 : 2} />
+        <Icon size={21} strokeWidth={active ? 2.35 : 1.9} />
         <span className="pointer-events-none absolute left-[3.8rem] z-[70] whitespace-nowrap rounded-lg bg-slate-950 px-2.5 py-1.5 text-xs font-semibold text-white opacity-0 shadow-xl transition duration-150 group-hover:translate-x-0.5 group-hover:opacity-100 dark:bg-white dark:text-slate-950">
           {item.label}
         </span>
@@ -117,17 +117,17 @@ export function Navbar() {
 
   return (
     <>
-      <aside className="fixed inset-y-0 left-0 z-50 hidden w-20 flex-col items-center border-r border-[var(--border)] bg-[color:var(--card)]/95 px-3 py-3 backdrop-blur-xl lg:flex">
+      <aside className="fixed inset-y-0 left-0 z-50 hidden w-20 flex-col items-center border-r border-slate-200/80 bg-white/95 px-3 py-3 shadow-[8px_0_32px_rgba(15,23,42,0.03)] backdrop-blur-xl dark:border-white/10 dark:bg-[#0b1322]/95 dark:shadow-[8px_0_32px_rgba(0,0,0,0.12)] lg:flex">
         <Link
           href="/"
           aria-label="DevAssess home"
-          className="mb-2 grid h-12 w-12 place-items-center rounded-full bg-[var(--primary)] text-sm font-black tracking-tight text-white shadow-lg shadow-blue-500/20 transition hover:scale-105"
+          className="mb-3 grid h-11 w-11 place-items-center rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 text-xs font-black tracking-tight text-white shadow-[0_8px_22px_rgba(37,99,235,0.28)] ring-1 ring-blue-400/25 transition hover:scale-[1.03] dark:from-blue-400 dark:to-blue-600"
         >
           DA
         </Link>
 
         <nav
-          className="flex min-h-0 flex-1 flex-col items-center gap-1 overflow-y-auto py-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          className="flex min-h-0 flex-1 flex-col items-center gap-1.5 overflow-y-auto py-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           aria-label="Primary navigation"
         >
           {primaryLinks.map((item) => (
@@ -145,7 +145,7 @@ export function Navbar() {
         </nav>
 
         <div className="mt-2 flex flex-col items-center gap-2">
-          <div className="[&_button]:h-12 [&_button]:w-12 [&_button]:rounded-full">
+          <div className="[&_button]:h-11 [&_button]:w-11 [&_button]:rounded-2xl [&_button]:border-transparent [&_button]:text-slate-600 dark:[&_button]:text-slate-300">
             <ThemeToggle />
           </div>
 
@@ -154,7 +154,7 @@ export function Navbar() {
               <Link
                 href="/login"
                 aria-label="Sign in"
-                className="group relative grid h-12 w-12 place-items-center rounded-full border border-[var(--border)] text-[var(--foreground)] transition hover:bg-[var(--muted-bg)]"
+                className="group relative grid h-11 w-11 place-items-center rounded-2xl border border-transparent text-slate-600 transition hover:border-blue-200/70 hover:bg-blue-50 hover:text-blue-700 dark:text-slate-300 dark:hover:border-white/10 dark:hover:bg-white/[0.07] dark:hover:text-cyan-100"
               >
                 <LogIn size={21} />
                 <span className="pointer-events-none absolute left-[3.8rem] z-[70] whitespace-nowrap rounded-lg bg-slate-950 px-2.5 py-1.5 text-xs font-semibold text-white opacity-0 shadow-xl transition group-hover:opacity-100 dark:bg-white dark:text-slate-950">
@@ -165,7 +165,7 @@ export function Navbar() {
               <Link
                 href="/register"
                 aria-label="Create account"
-                className="group relative grid h-12 w-12 place-items-center rounded-full bg-[var(--primary)] text-white shadow-lg shadow-blue-500/20 transition hover:bg-[var(--primary-hover)]"
+                className="group relative grid h-11 w-11 place-items-center rounded-2xl bg-blue-600 text-white shadow-[0_8px_22px_rgba(37,99,235,0.24)] transition hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-400"
               >
                 <UserPlus size={21} />
                 <span className="pointer-events-none absolute left-[3.8rem] z-[70] whitespace-nowrap rounded-lg bg-slate-950 px-2.5 py-1.5 text-xs font-semibold text-white opacity-0 shadow-xl transition group-hover:opacity-100 dark:bg-white dark:text-slate-950">
@@ -178,7 +178,7 @@ export function Navbar() {
               type="button"
               onClick={() => void signOut()}
               aria-label="Logout"
-              className="group relative grid h-12 w-12 place-items-center rounded-full border border-[var(--border)] text-[var(--foreground)] transition hover:bg-[var(--muted-bg)]"
+              className="group relative grid h-11 w-11 place-items-center rounded-2xl border border-transparent text-slate-600 transition hover:border-blue-200/70 hover:bg-blue-50 hover:text-blue-700 dark:text-slate-300 dark:hover:border-white/10 dark:hover:bg-white/[0.07] dark:hover:text-cyan-100"
             >
               <LogOut size={21} />
               <span className="pointer-events-none absolute left-[3.8rem] z-[70] whitespace-nowrap rounded-lg bg-slate-950 px-2.5 py-1.5 text-xs font-semibold text-white opacity-0 shadow-xl transition group-hover:opacity-100 dark:bg-white dark:text-slate-950">
@@ -248,8 +248,8 @@ export function Navbar() {
                     className={[
                       "flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition hover:bg-[var(--muted-bg)]",
                       isActive(item.href)
-                        ? "bg-[var(--muted-bg)] text-[var(--foreground)]"
-                        : "",
+                        ? "bg-blue-600 text-white shadow-sm dark:bg-blue-500"
+                        : "text-slate-700 dark:text-slate-200",
                     ].join(" ")}
                   >
                     <Icon size={17} /> {item.label}
