@@ -134,9 +134,14 @@ export default function Gravity({
   const mouseConstraintRef = useRef<Matter.MouseConstraint | null>(null);
   const bodiesMapRef = useRef(new Map<string, RegisteredBody>());
   const frameRef = useRef<number | null>(null);
+  const disposedRef = useRef(false);
 
   const syncElements = useCallback(() => {
+    if (disposedRef.current) return;
+
     bodiesMapRef.current.forEach(({ element, body }) => {
+      if (!element.isConnected) return;
+
       const rotation = body.angle * (180 / Math.PI);
       element.style.transform = `translate3d(${
         body.position.x - element.offsetWidth / 2
@@ -145,7 +150,9 @@ export default function Gravity({
       }px, 0) rotate(${rotation}deg)`;
     });
 
-    frameRef.current = requestAnimationFrame(syncElements);
+    if (!disposedRef.current) {
+      frameRef.current = requestAnimationFrame(syncElements);
+    }
   }, []);
 
   const unregisterElement = useCallback((id: string) => {
@@ -195,6 +202,7 @@ export default function Gravity({
     let disposed = false;
 
     function initialize() {
+      disposedRef.current = false;
       const host = canvasRef.current;
       if (!host || disposed) return;
 
@@ -234,6 +242,7 @@ export default function Gravity({
         },
       });
       mouseConstraintRef.current = mouseConstraint;
+      render.mouse = mouse;
 
       const wallOptions: Matter.IChamferableBodyDefinition = {
         isStatic: true,
@@ -271,6 +280,8 @@ export default function Gravity({
     }
 
     function cleanup() {
+      disposedRef.current = true;
+
       if (frameRef.current !== null) {
         cancelAnimationFrame(frameRef.current);
         frameRef.current = null;
@@ -286,9 +297,13 @@ export default function Gravity({
       }
 
       if (render) {
-        Mouse.clearSourceEvents(render.mouse);
+        if (render.mouse) {
+          Mouse.clearSourceEvents(render.mouse);
+        }
         Render.stop(render);
-        render.canvas.remove();
+        if (render.canvas.parentNode) {
+          render.canvas.remove();
+        }
         render.textures = {};
       }
 
