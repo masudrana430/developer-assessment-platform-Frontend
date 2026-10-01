@@ -47,7 +47,7 @@ export default function HomePage() {
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Link
                   href="/assessments"
-                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-slate-950 px-5 py-3 text-sm font-bold text-white shadow-[0_10px_28px_rgba(15,23,42,0.18)] transition hover:-translate-y-0.5 hover:bg-blue-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 dark:bg-white dark:text-slate-950 dark:shadow-[0_10px_28px_rgba(0,0,0,0.24)] dark:hover:bg-cyan-50"
+                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-blue-500/30 bg-blue-600 px-5 py-3 text-sm font-bold text-white shadow-[0_10px_28px_rgba(37,99,235,0.28)] transition hover:-translate-y-0.5 hover:bg-blue-700 hover:shadow-[0_14px_34px_rgba(37,99,235,0.34)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 dark:border-blue-400/30 dark:bg-blue-500 dark:text-white dark:shadow-[0_10px_30px_rgba(37,99,235,0.30)] dark:hover:bg-blue-400 dark:hover:shadow-[0_14px_36px_rgba(59,130,246,0.34)]"
                 >
                   Browse assessments <ArrowRight size={18} />
                 </Link>
