@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import {
   BadgeCheck,
@@ -8,6 +9,11 @@ import {
   TimerReset,
   Workflow,
 } from "lucide-react";
+
+const ShapeBlur = dynamic(
+  () => import("@/components/reactbits/shape-blur/ShapeBlur"),
+  { ssr: false },
+);
 
 const states = [
   {
@@ -99,13 +105,31 @@ export default function PlatformPulse() {
                     className={[
                       "relative rounded-2xl border p-4 text-left transition duration-300",
                       selected
-                        ? "scale-[1.02] border-blue-500/50 bg-blue-500/10 shadow-lg shadow-blue-500/10"
-                        : "border-[var(--border)] bg-[var(--background)] hover:border-blue-300/60",
+                        ? "scale-[1.02] overflow-hidden border-blue-500/45 bg-blue-500/10 shadow-lg shadow-blue-500/10 hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-500/15"
+                        : "border-[var(--border)] bg-[var(--background)]",
                     ].join(" ")}
                   >
+                    {selected ? (
+                      <div className="pointer-events-none absolute inset-0 z-0">
+                        <ShapeBlur
+                          variation={0}
+                          pixelRatioProp={
+                            typeof window !== "undefined"
+                              ? window.devicePixelRatio || 1
+                              : 1
+                          }
+                          shapeSize={1}
+                          roundness={0.5}
+                          borderSize={0.05}
+                          circleSize={0.25}
+                          circleEdge={1}
+                        />
+                      </div>
+                    ) : null}
+
                     <div
                       className={[
-                        "grid h-10 w-10 place-items-center rounded-xl transition",
+                        "relative z-10 grid h-10 w-10 place-items-center rounded-xl transition",
                         selected
                           ? "bg-blue-600 text-white"
                           : "bg-[var(--muted-bg)] text-[var(--muted)]",
@@ -113,12 +137,12 @@ export default function PlatformPulse() {
                     >
                       <Icon size={18} />
                     </div>
-                    <p className="mt-4 text-sm font-bold">{label}</p>
-                    <p className="mt-1 break-all text-[10px] font-semibold uppercase tracking-[0.08em] text-[var(--muted)]">
+                    <p className="relative z-10 mt-4 text-sm font-bold">{label}</p>
+                    <p className="relative z-10 mt-1 break-all text-[10px] font-semibold uppercase tracking-[0.08em] text-[var(--muted)]">
                       {code}
                     </p>
                     {selected ? (
-                      <div className="absolute inset-x-4 bottom-0 h-0.5 rounded-full bg-gradient-to-r from-blue-600 to-cyan-400" />
+                      <div className="absolute inset-x-4 bottom-0 z-10 h-0.5 rounded-full bg-gradient-to-r from-blue-600 to-cyan-400" />
                     ) : null}
                   </button>
                 );
