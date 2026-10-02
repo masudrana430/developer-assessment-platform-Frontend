@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import CommunityScene from "@/components/community/community-scene";
+import CommunityScene from "@/components/community/community-scene-responsive";
 
 export const metadata: Metadata = {
   title: "Join Our Community",
