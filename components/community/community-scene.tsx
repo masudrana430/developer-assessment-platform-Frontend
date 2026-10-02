@@ -122,7 +122,7 @@ export default function CommunityScene() {
         </Gravity>
 
         <section className="pointer-events-none relative z-30 mx-auto flex min-h-[calc(100vh-65px)] max-w-7xl items-start justify-center px-5 pb-16 pt-16 sm:px-8 md:items-center md:justify-end md:pt-0 lg:px-12">
-          <div className="pointer-events-auto w-full max-w-xl rounded-[2rem] border border-white/80 bg-white/72 p-7 shadow-2xl shadow-blue-200/30 backdrop-blur-2xl dark:border-white/15 dark:bg-slate-950/55 dark:shadow-black/25 sm:p-9 md:mr-6 lg:mr-10">
+          <div className="pointer-events-auto w-full max-w-xl rounded-[2rem] border border-white/55 bg-white/[0.38] p-7 shadow-[0_24px_80px_rgba(37,99,235,0.12)] ring-1 ring-white/35 backdrop-blur-[28px] backdrop-saturate-150 dark:border-white/12 dark:bg-slate-950/[0.28] dark:ring-white/10 dark:shadow-[0_24px_80px_rgba(0,0,0,0.30)] sm:p-9 md:mr-6 lg:mr-10">
             <div className="inline-flex items-center gap-2 rounded-full border border-blue-200/80 bg-blue-50/90 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.16em] text-blue-700 dark:border-cyan-100/15 dark:bg-white/[0.07] dark:text-cyan-100">
               <UsersRound size={14} />
               DevAssess Community
