@@ -50,8 +50,8 @@ export default function FaqPage() {
             Frequently asked questions
           </h1>
           <p className="mt-4 max-w-2xl text-sm leading-6 text-[var(--muted)] sm:text-base">
-            Move through the questions to reveal the flowing menu interaction,
-            then jump directly to the matching answer below.
+            Hover over any question to reveal its answer through the flowing
+            marquee interaction.
           </p>
         </div>
 
