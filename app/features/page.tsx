@@ -8,7 +8,7 @@ import {
   Shield,
   UserCog,
 } from "lucide-react";
-import { GlowingEffect } from "@/components/ui/glowing-effect";
+import { ResponsiveGlowingEffect } from "@/components/ui/responsive-glowing-effect";
 
 export const metadata: Metadata = {
   title: "Features",
@@ -72,7 +72,7 @@ function GridItem({ area, icon, title, description }: GridItemProps) {
   return (
     <li className={`group min-h-[14rem] list-none ${area}`}>
       <div className="relative h-full rounded-2xl border border-[var(--border)] p-2 md:rounded-3xl md:p-3">
-        <GlowingEffect
+        <ResponsiveGlowingEffect
           spread={40}
           glow
           disabled={false}
