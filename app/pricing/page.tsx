@@ -7,7 +7,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
-import { GlareHover } from "@/components/magicui/glare-hover";
+import { ResponsiveGlareHover } from "@/components/magicui/responsive-glare-hover";
 
 export const metadata: Metadata = {
   title: "Pricing",
@@ -68,7 +68,7 @@ export default function PricingPage() {
 
       <div className="mt-10 grid gap-5 md:grid-cols-3">
         {pricingCards.map(({ eyebrow, title, description, footer, Icon }) => (
-          <GlareHover
+          <ResponsiveGlareHover
             key={title}
             className="h-full w-full rounded-2xl"
             background="transparent"
@@ -102,7 +102,7 @@ export default function PricingPage() {
                 </p>
               </div>
             </Card>
-          </GlareHover>
+          </ResponsiveGlareHover>
         ))}
       </div>
 
