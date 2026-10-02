@@ -212,7 +212,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
       style={{ borderTop: isFirst ? "none" : `1px solid ${borderColor}` }}
     >
       <a
-        className="relative flex h-full cursor-pointer items-center justify-center px-8 text-center text-[clamp(1.35rem,2.2vw,2.5rem)] font-semibold uppercase leading-[1.05] no-underline"
+        className="relative flex h-full cursor-pointer items-center justify-center px-8 text-center text-[4vh] font-semibold uppercase no-underline"
         href={link}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
@@ -233,7 +233,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
               key={idx}
               style={{ color: marqueeTextColor }}
             >
-              <span className="whitespace-nowrap px-[1vw] text-[clamp(1.4rem,2.2vw,2.6rem)] font-normal uppercase leading-none">
+              <span className="whitespace-nowrap px-[1vw] text-[4vh] font-normal uppercase leading-none">
                 {text}
               </span>
               <div
