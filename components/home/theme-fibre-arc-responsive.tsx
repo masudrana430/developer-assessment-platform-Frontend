@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { useTheme } from "@/components/theme-provider";
+import useLargeDevice from "@/hooks/use-large-device";
 import useSmallDevice from "@/hooks/use-small-device";
 
 const DesktopThemeFibreArc = dynamic(
@@ -9,15 +10,12 @@ const DesktopThemeFibreArc = dynamic(
   { ssr: false },
 );
 
-export default function ThemeFibreArcResponsive() {
-  const small = useSmallDevice();
-  const { theme, ready } = useTheme();
-  const dark = ready ? theme === "dark" : true;
+const FloatingLines = dynamic(
+  () => import("@/components/reactbits/floating-lines/FloatingLines"),
+  { ssr: false },
+);
 
-  if (small === false) {
-    return <DesktopThemeFibreArc />;
-  }
-
+function StaticHeroBackground({ dark }: { dark: boolean }) {
   return (
     <div
       className="h-full w-full"
@@ -28,4 +26,44 @@ export default function ThemeFibreArcResponsive() {
       }}
     />
   );
+}
+
+export default function ThemeFibreArcResponsive() {
+  const small = useSmallDevice();
+  const large = useLargeDevice();
+  const { theme, ready } = useTheme();
+  const dark = ready ? theme === "dark" : true;
+
+  if (!ready || small === null || large === null) {
+    return <StaticHeroBackground dark={dark} />;
+  }
+
+  if (small) {
+    return <StaticHeroBackground dark={dark} />;
+  }
+
+  if (large && !dark) {
+    return (
+      <FloatingLines
+        linesGradient={["#2563EB", "#06B6D4", "#60A5FA", "#8B5CF6"]}
+        enabledWaves={["top", "middle", "bottom"]}
+        lineCount={[5, 7, 5]}
+        lineDistance={[5, 4, 6]}
+        topWavePosition={{ x: 10, y: 0.45, rotate: -0.35 }}
+        middleWavePosition={{ x: 5, y: 0, rotate: 0.16 }}
+        bottomWavePosition={{ x: 2, y: -0.75, rotate: -0.8 }}
+        animationSpeed={0.78}
+        interactive
+        bendRadius={5}
+        bendStrength={-0.38}
+        mouseDamping={0.06}
+        parallax
+        parallaxStrength={0.12}
+        backgroundColor="#EEF6FF"
+        lightMode
+      />
+    );
+  }
+
+  return <DesktopThemeFibreArc />;
 }
