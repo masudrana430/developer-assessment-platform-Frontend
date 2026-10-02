@@ -1,12 +1,12 @@
 import Link from "next/link";
 import { ArrowRight, BadgeCheck, CreditCard, TimerReset, UsersRound, ShieldCheck, Sparkles } from "lucide-react";
-import ThemeFibreArc from "@/components/home/theme-fibre-arc";
-import GravityContact from "@/components/home/gravity-contact";
-import AssessmentJourney from "@/components/home/assessment-journey";
+import ThemeFibreArc from "@/components/home/theme-fibre-arc-responsive";
+import GravityContact from "@/components/home/gravity-contact-responsive";
+import AssessmentJourney from "@/components/home/assessment-journey-responsive";
 import RoleWorkspaceSwitcher from "@/components/home/role-workspace-switcher";
-import PlatformPulse from "@/components/home/platform-pulse";
-import TrustControlMap from "@/components/home/trust-control-map";
-import FeatureMagicBento from "@/components/home/feature-magic-bento";
+import PlatformPulse from "@/components/home/platform-pulse-responsive";
+import TrustControlMap from "@/components/home/trust-control-map-responsive";
+import FeatureMagicBento from "@/components/home/feature-magic-bento-responsive";
 
 const workflow = [
   "Choose a published assessment",
