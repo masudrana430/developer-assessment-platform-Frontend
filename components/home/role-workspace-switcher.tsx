@@ -1,6 +1,8 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useState } from "react";
+import useSmallDevice from "@/hooks/use-small-device";
 import {
   BarChart3,
   BadgeCheck,
@@ -12,6 +14,11 @@ import {
   UsersRound,
   type LucideIcon,
 } from "lucide-react";
+
+const TargetCursor = dynamic(
+  () => import("@/components/reactbits/target-cursor/TargetCursor"),
+  { ssr: false },
+);
 
 type RoleKey = "candidate" | "reviewer" | "admin";
 
@@ -64,11 +71,27 @@ const roles: Record<RoleKey, RoleConfig> = {
 
 export default function RoleWorkspaceSwitcher() {
   const [active, setActive] = useState<RoleKey>("candidate");
+  const small = useSmallDevice();
   const config = roles[active];
   const ActiveIcon = config.Icon;
 
   return (
-    <section className="px-4 py-16 sm:px-6 sm:py-20">
+    <section
+      id="role-workspaces-target-cursor"
+      className="px-4 py-16 sm:px-6 sm:py-20"
+    >
+      {small === false ? (
+        <TargetCursor
+          targetSelector=".role-workspace-cursor-target"
+          scopeSelector="#role-workspaces-target-cursor"
+          spinDuration={2}
+          hideDefaultCursor
+          parallaxOn
+          hoverDuration={0.2}
+          cursorColor="#ffffff"
+          cursorColorOnTarget="#B497CF"
+        />
+      ) : null}
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-8 lg:grid-cols-[0.78fr_1.22fr] lg:items-stretch">
           <div className="flex flex-col justify-between rounded-[2rem] border border-[var(--border)] bg-[var(--card)] p-6 sm:p-8">
@@ -96,7 +119,7 @@ export default function RoleWorkspaceSwitcher() {
                     type="button"
                     onClick={() => setActive(key)}
                     className={[
-                      "flex items-center justify-between rounded-2xl border px-4 py-4 text-left transition",
+                      "role-workspace-cursor-target flex items-center justify-between rounded-2xl border px-4 py-4 text-left transition duration-300 hover:-translate-y-0.5",
                       selected
                         ? "border-blue-500/40 bg-blue-500/10 shadow-sm"
                         : "border-[var(--border)] hover:bg-[var(--muted-bg)]",
@@ -150,7 +173,7 @@ export default function RoleWorkspaceSwitcher() {
                 {config.steps.map(({ label, detail, Icon }, index) => (
                   <div
                     key={label}
-                    className="group rounded-2xl border border-white/10 bg-white/[0.06] p-5 backdrop-blur transition duration-300 hover:-translate-y-1 hover:border-cyan-100/25 hover:bg-white/[0.10]"
+                    className="role-workspace-cursor-target group rounded-2xl border border-white/10 bg-white/[0.06] p-5 backdrop-blur transition duration-300 hover:-translate-y-1 hover:border-cyan-100/25 hover:bg-white/[0.10]"
                   >
                     <div className="flex items-center justify-between">
                       <div className="grid h-10 w-10 place-items-center rounded-xl bg-white/10 text-cyan-100">
@@ -164,7 +187,7 @@ export default function RoleWorkspaceSwitcher() {
                 ))}
               </div>
 
-              <div className="mt-6 rounded-2xl border border-white/10 bg-slate-950/30 p-4">
+              <div className="role-workspace-cursor-target mt-6 rounded-2xl border border-white/10 bg-slate-950/30 p-4 transition duration-300 hover:-translate-y-0.5 hover:border-violet-300/35 hover:bg-slate-950/40">
                 <div className="flex items-center justify-between text-xs font-bold uppercase tracking-[0.16em] text-slate-400">
                   <span>Role-aware experience</span>
                   <span className="text-emerald-300">Active</span>
