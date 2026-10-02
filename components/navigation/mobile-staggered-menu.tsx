@@ -10,6 +10,7 @@ import {
   type CSSProperties,
 } from "react";
 import { gsap } from "gsap";
+
 import { ThemeToggle } from "@/components/theme-provider";
 import "./mobile-staggered-menu.css";
 
@@ -33,14 +34,14 @@ export default function MobileStaggeredMenu({
   const [open, setOpen] = useState(false);
   const openRef = useRef(false);
 
-  const panelRef = useRef<HTMLElement | null>(null);
-  const preLayersRef = useRef<HTMLDivElement | null>(null);
+  const panelRef = useRef<HTMLElement>(null);
+  const preLayersRef = useRef<HTMLDivElement>(null);
   const preLayerElsRef = useRef<HTMLElement[]>([]);
-  const plusHRef = useRef<HTMLSpanElement | null>(null);
-  const plusVRef = useRef<HTMLSpanElement | null>(null);
-  const iconRef = useRef<HTMLSpanElement | null>(null);
-  const textInnerRef = useRef<HTMLSpanElement | null>(null);
-  const toggleBtnRef = useRef<HTMLButtonElement | null>(null);
+  const plusHRef = useRef<HTMLSpanElement>(null);
+  const plusVRef = useRef<HTMLSpanElement>(null);
+  const iconRef = useRef<HTMLSpanElement>(null);
+  const textInnerRef = useRef<HTMLSpanElement>(null);
+  const toggleBtnRef = useRef<HTMLButtonElement>(null);
 
   const [textLines, setTextLines] = useState(["Menu", "Close"]);
 
@@ -64,23 +65,43 @@ export default function MobileStaggeredMenu({
       if (!panel || !plusH || !plusV || !icon || !textInner) return;
 
       const preLayers = preContainer
-        ? Array.from(preContainer.querySelectorAll<HTMLElement>(".mobile-sm__prelayer"))
+        ? Array.from(
+            preContainer.querySelectorAll<HTMLElement>(
+              ".mobile-staggered-menu__prelayer",
+            ),
+          )
         : [];
 
       preLayerElsRef.current = preLayers;
 
-      gsap.set([panel, ...preLayers], { xPercent: 100, opacity: 1 });
+      const offscreen = 100;
+      gsap.set([panel, ...preLayers], {
+        xPercent: offscreen,
+        opacity: 1,
+      });
+
       if (preContainer) {
         gsap.set(preContainer, { xPercent: 0, opacity: 1 });
       }
 
-      gsap.set(plusH, { transformOrigin: "50% 50%", rotate: 0 });
-      gsap.set(plusV, { transformOrigin: "50% 50%", rotate: 90 });
-      gsap.set(icon, { rotate: 0, transformOrigin: "50% 50%" });
+      gsap.set(plusH, {
+        transformOrigin: "50% 50%",
+        rotate: 0,
+      });
+      gsap.set(plusV, {
+        transformOrigin: "50% 50%",
+        rotate: 90,
+      });
+      gsap.set(icon, {
+        rotate: 0,
+        transformOrigin: "50% 50%",
+      });
       gsap.set(textInner, { yPercent: 0 });
     });
 
-    return () => ctx.revert();
+    return () => {
+      ctx.revert();
+    };
   }, []);
 
   const buildOpenTimeline = useCallback(() => {
@@ -89,63 +110,91 @@ export default function MobileStaggeredMenu({
     if (!panel) return null;
 
     openTlRef.current?.kill();
-    closeTweenRef.current?.kill();
-    closeTweenRef.current = null;
+
+    if (closeTweenRef.current) {
+      closeTweenRef.current.kill();
+      closeTweenRef.current = null;
+    }
 
     const itemEls = Array.from(
-      panel.querySelectorAll<HTMLElement>(".mobile-sm__item-label"),
+      panel.querySelectorAll<HTMLElement>(
+        ".mobile-staggered-menu__item-label",
+      ),
     );
     const numberEls = Array.from(
       panel.querySelectorAll<HTMLElement>(
-        ".mobile-sm__list[data-numbering] .mobile-sm__item",
+        ".mobile-staggered-menu__list[data-numbering] .mobile-staggered-menu__item",
       ),
     );
-    const footerTitle = panel.querySelector<HTMLElement>(".mobile-sm__footer-title");
-    const footerActions = Array.from(
-      panel.querySelectorAll<HTMLElement>(".mobile-sm__footer-action"),
+    const footerLabel = panel.querySelector<HTMLElement>(
+      ".mobile-staggered-menu__footer-label",
     );
+    const footerActions = Array.from(
+      panel.querySelectorAll<HTMLElement>(
+        ".mobile-staggered-menu__footer-link, .mobile-staggered-menu__footer-button",
+      ),
+    );
+
+    const offscreen = 100;
+    const layerStates = layers.map((element) => ({
+      element,
+      start: offscreen,
+    }));
 
     if (itemEls.length) {
       gsap.set(itemEls, { yPercent: 140, rotate: 10 });
     }
+
     if (numberEls.length) {
-      gsap.set(
-        numberEls,
-        { "--sm-num-opacity": 0 } as unknown as gsap.TweenVars,
-      );
+      gsap.set(numberEls, { "--sm-num-opacity": 0 });
     }
-    if (footerTitle) {
-      gsap.set(footerTitle, { opacity: 0 });
+
+    if (footerLabel) {
+      gsap.set(footerLabel, { opacity: 0 });
     }
+
     if (footerActions.length) {
       gsap.set(footerActions, { y: 25, opacity: 0 });
     }
 
-    const tl = gsap.timeline({ paused: true });
+    const timeline = gsap.timeline({ paused: true });
 
-    layers.forEach((layer, index) => {
-      tl.fromTo(
-        layer,
-        { xPercent: 100 },
-        { xPercent: 0, duration: 0.5, ease: "power4.out" },
+    layerStates.forEach((layerState, index) => {
+      timeline.fromTo(
+        layerState.element,
+        { xPercent: layerState.start },
+        {
+          xPercent: 0,
+          duration: 0.5,
+          ease: "power4.out",
+        },
         index * 0.07,
       );
     });
 
-    const lastTime = layers.length ? (layers.length - 1) * 0.07 : 0;
-    const panelInsertTime = lastTime + (layers.length ? 0.08 : 0);
+    const lastTime = layerStates.length
+      ? (layerStates.length - 1) * 0.07
+      : 0;
+    const panelInsertTime =
+      lastTime + (layerStates.length ? 0.08 : 0);
     const panelDuration = 0.65;
 
-    tl.fromTo(
+    timeline.fromTo(
       panel,
-      { xPercent: 100 },
-      { xPercent: 0, duration: panelDuration, ease: "power4.out" },
+      { xPercent: offscreen },
+      {
+        xPercent: 0,
+        duration: panelDuration,
+        ease: "power4.out",
+      },
       panelInsertTime,
     );
 
     if (itemEls.length) {
-      const itemsStart = panelInsertTime + panelDuration * 0.15;
-      tl.to(
+      const itemsStart =
+        panelInsertTime + panelDuration * 0.15;
+
+      timeline.to(
         itemEls,
         {
           yPercent: 0,
@@ -158,53 +207,56 @@ export default function MobileStaggeredMenu({
       );
 
       if (numberEls.length) {
-        tl.to(
+        timeline.to(
           numberEls,
           {
             duration: 0.6,
             ease: "power2.out",
             "--sm-num-opacity": 1,
             stagger: { each: 0.08, from: "start" },
-          } as unknown as gsap.TweenVars,
+          },
           itemsStart + 0.1,
         );
       }
     }
 
-    if (footerTitle || footerActions.length) {
-      const footerStart = panelInsertTime + panelDuration * 0.4;
+    const footerStart =
+      panelInsertTime + panelDuration * 0.4;
 
-      if (footerTitle) {
-        tl.to(
-          footerTitle,
-          { opacity: 1, duration: 0.5, ease: "power2.out" },
-          footerStart,
-        );
-      }
-
-      if (footerActions.length) {
-        tl.to(
-          footerActions,
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.55,
-            ease: "power3.out",
-            stagger: { each: 0.08, from: "start" },
-          },
-          footerStart + 0.04,
-        );
-      }
+    if (footerLabel) {
+      timeline.to(
+        footerLabel,
+        {
+          opacity: 1,
+          duration: 0.5,
+          ease: "power2.out",
+        },
+        footerStart,
+      );
     }
 
-    openTlRef.current = tl;
-    return tl;
+    if (footerActions.length) {
+      timeline.to(
+        footerActions,
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.55,
+          ease: "power3.out",
+          stagger: { each: 0.08, from: "start" },
+        },
+        footerStart + 0.04,
+      );
+    }
+
+    openTlRef.current = timeline;
+    return timeline;
   }, []);
 
   const playOpen = useCallback(() => {
     if (busyRef.current) return;
-    busyRef.current = true;
 
+    busyRef.current = true;
     const timeline = buildOpenTimeline();
 
     if (!timeline) {
@@ -228,38 +280,45 @@ export default function MobileStaggeredMenu({
 
     closeTweenRef.current?.kill();
 
+    const offscreen = 100;
+
     closeTweenRef.current = gsap.to([...layers, panel], {
-      xPercent: 100,
+      xPercent: offscreen,
       duration: 0.32,
       ease: "power3.in",
       overwrite: "auto",
       onComplete: () => {
         const itemEls = Array.from(
-          panel.querySelectorAll<HTMLElement>(".mobile-sm__item-label"),
+          panel.querySelectorAll<HTMLElement>(
+            ".mobile-staggered-menu__item-label",
+          ),
         );
         const numberEls = Array.from(
           panel.querySelectorAll<HTMLElement>(
-            ".mobile-sm__list[data-numbering] .mobile-sm__item",
+            ".mobile-staggered-menu__list[data-numbering] .mobile-staggered-menu__item",
           ),
         );
-        const footerTitle =
-          panel.querySelector<HTMLElement>(".mobile-sm__footer-title");
+        const footerLabel = panel.querySelector<HTMLElement>(
+          ".mobile-staggered-menu__footer-label",
+        );
         const footerActions = Array.from(
-          panel.querySelectorAll<HTMLElement>(".mobile-sm__footer-action"),
+          panel.querySelectorAll<HTMLElement>(
+            ".mobile-staggered-menu__footer-link, .mobile-staggered-menu__footer-button",
+          ),
         );
 
         if (itemEls.length) {
           gsap.set(itemEls, { yPercent: 140, rotate: 10 });
         }
+
         if (numberEls.length) {
-          gsap.set(
-            numberEls,
-            { "--sm-num-opacity": 0 } as unknown as gsap.TweenVars,
-          );
+          gsap.set(numberEls, { "--sm-num-opacity": 0 });
         }
-        if (footerTitle) {
-          gsap.set(footerTitle, { opacity: 0 });
+
+        if (footerLabel) {
+          gsap.set(footerLabel, { opacity: 0 });
         }
+
         if (footerActions.length) {
           gsap.set(footerActions, { y: 25, opacity: 0 });
         }
@@ -274,6 +333,7 @@ export default function MobileStaggeredMenu({
     if (!icon) return;
 
     spinTweenRef.current?.kill();
+
     spinTweenRef.current = gsap.to(icon, {
       rotate: opening ? 225 : 0,
       duration: opening ? 0.8 : 0.35,
@@ -290,19 +350,21 @@ export default function MobileStaggeredMenu({
 
     const currentLabel = opening ? "Menu" : "Close";
     const targetLabel = opening ? "Close" : "Menu";
-    const cycles = 3;
     const sequence = [currentLabel];
-
     let last = currentLabel;
-    for (let index = 0; index < cycles; index += 1) {
+
+    for (let index = 0; index < 3; index += 1) {
       last = last === "Menu" ? "Close" : "Menu";
       sequence.push(last);
     }
 
-    if (last !== targetLabel) sequence.push(targetLabel);
-    sequence.push(targetLabel);
+    if (last !== targetLabel) {
+      sequence.push(targetLabel);
+    }
 
+    sequence.push(targetLabel);
     setTextLines(sequence);
+
     gsap.set(inner, { yPercent: 0 });
 
     const lineCount = sequence.length;
@@ -327,6 +389,7 @@ export default function MobileStaggeredMenu({
 
   const toggleMenu = useCallback(() => {
     const target = !openRef.current;
+
     openRef.current = target;
     setOpen(target);
 
@@ -348,6 +411,7 @@ export default function MobileStaggeredMenu({
 
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Node;
+
       if (
         panelRef.current &&
         !panelRef.current.contains(target) &&
@@ -362,7 +426,10 @@ export default function MobileStaggeredMenu({
 
     return () => {
       document.body.style.overflow = previousOverflow;
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener(
+        "mousedown",
+        handleClickOutside,
+      );
     };
   }, [closeMenu, open]);
 
@@ -379,151 +446,172 @@ export default function MobileStaggeredMenu({
     "--sm-accent": "#2563eb",
   } as CSSProperties;
 
-  const layerColors = (() => {
-    const raw = colors.slice(0, 4);
-    const output = [...raw];
+  const rawColors = colors.slice(0, 4);
+  const layerColors = [...rawColors];
 
-    if (output.length >= 3) {
-      const middle = Math.floor(output.length / 2);
-      output.splice(middle, 1);
-    }
-
-    return output;
-  })();
+  if (layerColors.length >= 3) {
+    layerColors.splice(Math.floor(layerColors.length / 2), 1);
+  }
 
   return (
     <>
       <div className="h-16 lg:hidden" aria-hidden="true" />
-
       <div
-        className="mobile-staggered-menu"
-        style={accentStyle}
-        data-position="right"
-        data-open={open || undefined}
+      className="mobile-staggered-menu"
+      data-open={open || undefined}
+      data-position="right"
+      style={accentStyle}
+    >
+      <div
+        ref={preLayersRef}
+        className="mobile-staggered-menu__prelayers"
+        aria-hidden="true"
       >
-        <div ref={preLayersRef} className="mobile-sm__prelayers" aria-hidden="true">
-          {layerColors.map((color) => (
-            <div
-              key={color}
-              className="mobile-sm__prelayer"
-              style={{ background: color }}
-            />
-          ))}
-        </div>
+        {layerColors.map((color) => (
+          <div
+            key={color}
+            className="mobile-staggered-menu__prelayer"
+            style={{ background: color }}
+          />
+        ))}
+      </div>
 
-        <header className="mobile-sm__header" aria-label="Mobile navigation header">
-          <Link
-            href="/"
-            onClick={closeMenu}
-            className="mobile-sm__brand"
-            aria-label="DevAssess home"
-          >
-            <span className="mobile-sm__brand-mark">DA</span>
-            <span className="mobile-sm__brand-name">DevAssess</span>
-          </Link>
-
-          <div className="mobile-sm__header-actions">
-            <div className="mobile-sm__theme">
-              <ThemeToggle />
-            </div>
-
-            <button
-              ref={toggleBtnRef}
-              className="mobile-sm__toggle"
-              aria-label={open ? "Close menu" : "Open menu"}
-              aria-expanded={open}
-              aria-controls="mobile-staggered-menu-panel"
-              onClick={toggleMenu}
-              type="button"
-            >
-              <span className="mobile-sm__toggle-text-wrap" aria-hidden="true">
-                <span ref={textInnerRef} className="mobile-sm__toggle-text-inner">
-                  {textLines.map((line, index) => (
-                    <span className="mobile-sm__toggle-line" key={index}>
-                      {line}
-                    </span>
-                  ))}
-                </span>
-              </span>
-
-              <span ref={iconRef} className="mobile-sm__icon" aria-hidden="true">
-                <span ref={plusHRef} className="mobile-sm__icon-line" />
-                <span
-                  ref={plusVRef}
-                  className="mobile-sm__icon-line mobile-sm__icon-line-v"
-                />
-              </span>
-            </button>
-          </div>
-        </header>
-
-        <aside
-          id="mobile-staggered-menu-panel"
-          ref={panelRef}
-          className="mobile-sm__panel"
-          aria-hidden={!open}
+      <header
+        className="mobile-staggered-menu__header"
+        aria-label="Mobile navigation header"
+      >
+        <Link
+          href="/"
+          className="mobile-staggered-menu__brand"
+          onClick={closeMenu}
         >
-          <div className="mobile-sm__panel-inner">
-            <ul
-              className="mobile-sm__list"
-              role="list"
-              data-numbering
+          <span className="mobile-staggered-menu__brand-mark">
+            DA
+          </span>
+          <span>DevAssess</span>
+        </Link>
+
+        <div className="mobile-staggered-menu__actions">
+          <div className="mobile-staggered-menu__theme">
+            <ThemeToggle />
+          </div>
+
+          <button
+            ref={toggleBtnRef}
+            className="mobile-staggered-menu__toggle"
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+            aria-controls="mobile-staggered-menu-panel"
+            onClick={toggleMenu}
+            type="button"
+          >
+            <span
+              className="mobile-staggered-menu__toggle-text-wrap"
+              aria-hidden="true"
             >
-              {items.map((item, index) => (
-                <li className="mobile-sm__item-wrap" key={item.href}>
+              <span
+                ref={textInnerRef}
+                className="mobile-staggered-menu__toggle-text-inner"
+              >
+                {textLines.map((line, index) => (
+                  <span
+                    className="mobile-staggered-menu__toggle-line"
+                    key={line + index}
+                  >
+                    {line}
+                  </span>
+                ))}
+              </span>
+            </span>
+
+            <span
+              ref={iconRef}
+              className="mobile-staggered-menu__icon"
+              aria-hidden="true"
+            >
+              <span
+                ref={plusHRef}
+                className="mobile-staggered-menu__icon-line"
+              />
+              <span
+                ref={plusVRef}
+                className="mobile-staggered-menu__icon-line"
+              />
+            </span>
+          </button>
+        </div>
+      </header>
+
+      <aside
+        id="mobile-staggered-menu-panel"
+        ref={panelRef}
+        className="mobile-staggered-menu__panel"
+        aria-hidden={!open}
+      >
+        <div className="mobile-staggered-menu__panel-inner">
+          <ul
+            className="mobile-staggered-menu__list"
+            role="list"
+            data-numbering
+          >
+            {items.map((item) => (
+              <li
+                className="mobile-staggered-menu__item-wrap"
+                key={item.href}
+              >
+                <Link
+                  href={item.href}
+                  className="mobile-staggered-menu__item"
+                  aria-current={item.active ? "page" : undefined}
+                  onClick={closeMenu}
+                >
+                  <span className="mobile-staggered-menu__item-label">
+                    {item.label}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          <div className="mobile-staggered-menu__footer">
+            <p className="mobile-staggered-menu__footer-label">
+              Account
+            </p>
+
+            <div className="mobile-staggered-menu__footer-actions">
+              {!authenticated ? (
+                <>
                   <Link
-                    href={item.href}
+                    href="/login"
+                    className="mobile-staggered-menu__footer-link"
                     onClick={closeMenu}
-                    aria-current={item.active ? "page" : undefined}
-                    className={[
-                      "mobile-sm__item",
-                      item.active ? "mobile-sm__item--active" : "",
-                    ].join(" ")}
-                    data-index={index + 1}
                   >
-                    <span className="mobile-sm__item-label">{item.label}</span>
+                    Sign in
                   </Link>
-                </li>
-              ))}
-            </ul>
-
-            <div className="mobile-sm__footer" aria-label="Account actions">
-              <h3 className="mobile-sm__footer-title">Account</h3>
-
-              <div className="mobile-sm__footer-actions">
-                {!authenticated ? (
-                  <>
-                    <Link
-                      href="/login"
-                      onClick={closeMenu}
-                      className="mobile-sm__footer-action"
-                    >
-                      Sign in
-                    </Link>
-                    <Link
-                      href="/register"
-                      onClick={closeMenu}
-                      className="mobile-sm__footer-action mobile-sm__footer-action--primary"
-                    >
-                      Create account
-                    </Link>
-                  </>
-                ) : (
-                  <button
-                    type="button"
-                    className="mobile-sm__footer-action"
-                    onClick={() => {
-                      closeMenu();
-                      void onLogout();
-                    }}
+                  <Link
+                    href="/register"
+                    className="mobile-staggered-menu__footer-link mobile-staggered-menu__footer-link--primary"
+                    onClick={closeMenu}
                   >
-                    Logout
-                  </button>
-                )}
-              </div>
+                    Create account
+                  </Link>
+                </>
+              ) : (
+                <button
+                  type="button"
+                  className="mobile-staggered-menu__footer-button"
+                  onClick={() => {
+                    closeMenu();
+                    void onLogout();
+                  }}
+                >
+                  Logout
+                </button>
+              )}
             </div>
           </div>
-        </aside>
+        </div>
+      </aside>
       </div>
     </>
   );
