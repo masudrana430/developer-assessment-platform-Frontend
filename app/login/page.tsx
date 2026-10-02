@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { LoginForm } from "@/components/auth/login-form";
 import { Skeleton } from "@/components/ui/skeleton";
-import AuthRibbonBackground from "@/components/auth/auth-ribbon-background";
+import AuthRibbonBackground from "@/components/auth/auth-ribbon-background-responsive";
 
 export const metadata: Metadata = {
   title: "Login",
