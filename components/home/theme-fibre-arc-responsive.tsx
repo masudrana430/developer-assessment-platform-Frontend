@@ -47,7 +47,7 @@ export default function ThemeFibreArcResponsive() {
       <div
         style={{
           width: "100%",
-          height: "600px",
+          height: "100%",
           position: "relative",
           zIndex: 1,
           pointerEvents: "none",
