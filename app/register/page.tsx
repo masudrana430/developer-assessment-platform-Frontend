@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { RegisterForm } from "@/components/auth/register-form";
-import AuthRibbonBackground from "@/components/auth/auth-ribbon-background";
+import AuthRibbonBackground from "@/components/auth/auth-ribbon-background-responsive";
 
 export const metadata: Metadata = {
   title: "Register",
