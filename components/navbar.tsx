@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 import {
   BadgeDollarSign,
   CheckSquare,
@@ -22,7 +23,7 @@ import {
 } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-provider";
 import { useAuth } from "@/components/auth-provider";
-import MobileStaggeredMenu from "@/components/navigation/mobile-staggered-menu";
+import StaggeredMenuToggle from "@/components/navigation/staggered-menu-toggle";
 
 type NavItem = {
   href: string;
@@ -31,6 +32,7 @@ type NavItem = {
 };
 
 export function Navbar() {
+  const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const { user, logout } = useAuth();
 
@@ -84,6 +86,7 @@ export function Navbar() {
 
   async function signOut() {
     await logout();
+    setOpen(false);
     window.location.assign("/");
   }
 
@@ -185,15 +188,112 @@ export function Navbar() {
         </div>
       </aside>
 
-      <MobileStaggeredMenu
-        items={[...primaryLinks, ...roleLinks].map((item) => ({
-          href: item.href,
-          label: item.label,
-          active: isActive(item.href),
-        }))}
-        authenticated={Boolean(user)}
-        onLogout={signOut}
-      />
+      <header className="sticky top-0 z-40 border-b border-[var(--border)] bg-[color:var(--card)]/95 backdrop-blur lg:hidden">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
+          <Link
+            href="/"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-2 font-bold tracking-tight"
+          >
+            <span className="grid h-9 w-9 place-items-center rounded-xl bg-[var(--primary)] text-sm text-white">
+              DA
+            </span>
+            <span>DevAssess</span>
+          </Link>
+
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            {!user ? (
+              <Link
+                href="/login"
+                className="hidden rounded-xl bg-[var(--primary)] px-4 py-2 text-sm font-semibold text-white sm:inline-flex"
+              >
+                Sign in
+              </Link>
+            ) : (
+              <button
+                onClick={() => void signOut()}
+                className="hidden h-10 items-center gap-2 rounded-xl border border-[var(--border)] px-3 text-sm font-semibold sm:inline-flex"
+              >
+                <LogOut size={16} /> Logout
+              </button>
+            )}
+
+            <StaggeredMenuToggle
+              open={open}
+              onToggle={() => setOpen((value) => !value)}
+            />
+          </div>
+        </div>
+
+        {open ? (
+          <div className="border-t border-[var(--border)] bg-[var(--card)] px-4 py-3">
+            <nav
+              className="mx-auto grid max-w-7xl gap-1"
+              aria-label="Mobile navigation"
+            >
+              {primaryLinks.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setOpen(false)}
+                    className={[
+                      "flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition hover:bg-[var(--muted-bg)]",
+                      isActive(item.href)
+                        ? "bg-blue-600 text-white shadow-sm dark:bg-blue-500"
+                        : "text-slate-700 dark:text-slate-200",
+                    ].join(" ")}
+                  >
+                    <Icon size={17} /> {item.label}
+                  </Link>
+                );
+              })}
+
+              {roleLinks.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setOpen(false)}
+                    className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium hover:bg-[var(--muted-bg)]"
+                  >
+                    <Icon size={17} /> {item.label}
+                  </Link>
+                );
+              })}
+
+              {!user ? (
+                <>
+                  <Link
+                    href="/login"
+                    onClick={() => setOpen(false)}
+                    className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold hover:bg-[var(--muted-bg)]"
+                  >
+                    <LogIn size={17} /> Sign in
+                  </Link>
+                  <Link
+                    href="/register"
+                    onClick={() => setOpen(false)}
+                    className="flex items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-3 py-3 text-center text-sm font-semibold text-white"
+                  >
+                    <UserPlus size={17} /> Create account
+                  </Link>
+                </>
+              ) : (
+                <button
+                  onClick={() => void signOut()}
+                  className="flex items-center gap-3 rounded-xl px-3 py-3 text-left text-sm font-semibold hover:bg-[var(--muted-bg)]"
+                >
+                  <LogOut size={17} /> Logout
+                </button>
+              )}
+            </nav>
+          </div>
+        ) : null}
+      </header>
     </>
   );
 }
