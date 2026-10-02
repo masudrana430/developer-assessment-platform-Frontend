@@ -51,7 +51,7 @@ export default function FaqExperience({ faqs }: { faqs: FaqEntry[] }) {
   return (
     <div
       id="faq-flowing-menu"
-      className="relative h-[780px] overflow-hidden rounded-[2rem] border border-white/20"
+      className="relative h-[900px] overflow-hidden rounded-[2rem] border border-white/20"
       style={{ position: "relative" }}
     >
       <FlowingMenu
