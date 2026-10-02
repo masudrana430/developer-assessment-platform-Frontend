@@ -42,45 +42,27 @@ export default function FaqExperience({ faqs }: { faqs: FaqEntry[] }) {
   }
 
   const items = faqs.map((faq, index) => ({
-    link: `#faq-answer-${index + 1}`,
+    link: "#faq-flowing-menu",
     text: faq.question,
+    hoverText: faq.answer,
     image: demoImages[index % demoImages.length],
   }));
 
   return (
-    <>
-      <div
-        className="relative h-[600px] overflow-hidden rounded-[2rem] border border-white/20"
-        style={{ position: "relative" }}
-      >
-        <FlowingMenu
-          items={items}
-          speed={15}
-          textColor="#ffffff"
-          bgColor="#120F17"
-          marqueeBgColor="#ffffff"
-          marqueeTextColor="#120F17"
-          borderColor="#ffffff"
-        />
-      </div>
-
-      <section className="mt-12 grid gap-4 lg:grid-cols-2">
-        {faqs.map((faq, index) => (
-          <article
-            id={`faq-answer-${index + 1}`}
-            key={faq.question}
-            className="scroll-mt-24 rounded-3xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-sm"
-          >
-            <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--primary)]">
-              FAQ {String(index + 1).padStart(2, "0")}
-            </p>
-            <h2 className="mt-2 text-xl font-bold">{faq.question}</h2>
-            <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
-              {faq.answer}
-            </p>
-          </article>
-        ))}
-      </section>
-    </>
+    <div
+      id="faq-flowing-menu"
+      className="relative h-[780px] overflow-hidden rounded-[2rem] border border-white/20"
+      style={{ position: "relative" }}
+    >
+      <FlowingMenu
+        items={items}
+        speed={15}
+        textColor="#ffffff"
+        bgColor="#120F17"
+        marqueeBgColor="#ffffff"
+        marqueeTextColor="#120F17"
+        borderColor="#ffffff"
+      />
+    </div>
   );
 }
