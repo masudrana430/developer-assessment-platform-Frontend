@@ -44,7 +44,15 @@ export default function ThemeFibreArcResponsive() {
 
   if (large && !dark) {
     return (
-      <div style={{ width: "100%", height: "600px", position: "relative" }}>
+      <div
+        style={{
+          width: "100%",
+          height: "600px",
+          position: "relative",
+          zIndex: 1,
+          pointerEvents: "none",
+        }}
+      >
         <FloatingLines
           enabledWaves={["top", "middle", "bottom"]}
           lineCount={8}
