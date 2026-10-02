@@ -105,12 +105,20 @@ export default function PlatformPulse() {
                     className={[
                       "relative rounded-2xl border p-4 text-left transition duration-300",
                       selected
-                        ? "scale-[1.02] overflow-hidden border-blue-500/45 bg-blue-500/10 shadow-lg shadow-blue-500/10 hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-500/15"
+                        ? "scale-[1.02] overflow-hidden border-transparent bg-blue-500/10 shadow-lg shadow-blue-500/10 hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-500/15"
                         : "border-[var(--border)] bg-[var(--background)]",
                     ].join(" ")}
                   >
                     {selected ? (
-                      <div className="pointer-events-none absolute inset-0 z-0">
+                      <div
+                        className="pointer-events-none absolute inset-0 z-20 rounded-2xl p-[2px]"
+                        style={{
+                          WebkitMask:
+                            "linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)",
+                          WebkitMaskComposite: "xor",
+                          maskComposite: "exclude",
+                        }}
+                      >
                         <ShapeBlur
                           variation={0}
                           pixelRatioProp={
