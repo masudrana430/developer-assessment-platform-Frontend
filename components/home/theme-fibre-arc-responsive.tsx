@@ -45,21 +45,13 @@ export default function ThemeFibreArcResponsive() {
   if (large && !dark) {
     return (
       <FloatingLines
-        linesGradient={["#2563EB", "#06B6D4", "#60A5FA", "#8B5CF6"]}
         enabledWaves={["top", "middle", "bottom"]}
-        lineCount={[5, 7, 5]}
-        lineDistance={[5, 4, 6]}
-        topWavePosition={{ x: 10, y: 0.45, rotate: -0.35 }}
-        middleWavePosition={{ x: 5, y: 0, rotate: 0.16 }}
-        bottomWavePosition={{ x: 2, y: -0.75, rotate: -0.8 }}
-        animationSpeed={0.78}
-        interactive
-        bendRadius={5}
-        bendStrength={-0.38}
-        mouseDamping={0.06}
-        parallax
-        parallaxStrength={0.12}
-        backgroundColor="#EEF6FF"
+        lineCount={[10, 15, 20]}
+        lineDistance={[8, 6, 4]}
+        bendRadius={5.0}
+        bendStrength={-0.5}
+        interactive={true}
+        parallax={true}
         lightMode
       />
     );
