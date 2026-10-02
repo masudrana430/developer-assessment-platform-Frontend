@@ -229,6 +229,9 @@ type WavePosition = {
 
 type FloatingLinesProps = {
   linesGradient?: string[];
+  gradientStart?: string;
+  gradientMid?: string;
+  gradientEnd?: string;
   enabledWaves?: Array<'top' | 'middle' | 'bottom'>;
   lineCount?: number | number[];
   lineDistance?: number | number[];
@@ -273,6 +276,9 @@ function hexToVec3(hex: string): Vector3 {
 
 export default function FloatingLines({
   linesGradient,
+  gradientStart,
+  gradientMid,
+  gradientEnd,
   enabledWaves = ['top', 'middle', 'bottom'],
   lineCount = [6],
   lineDistance = [5],
@@ -390,8 +396,15 @@ export default function FloatingLines({
       lightMode: { value: lightMode }
     };
 
-    if (linesGradient && linesGradient.length > 0) {
-      const stops = linesGradient.slice(0, MAX_GRADIENT_STOPS);
+    const gradientStops =
+      linesGradient && linesGradient.length > 0
+        ? linesGradient
+        : [gradientStart, gradientMid, gradientEnd].filter(
+            (value): value is string => Boolean(value),
+          );
+
+    if (gradientStops.length > 0) {
+      const stops = gradientStops.slice(0, MAX_GRADIENT_STOPS);
       uniforms.lineGradientCount.value = stops.length;
 
       stops.forEach((hex, i) => {
@@ -509,6 +522,9 @@ export default function FloatingLines({
     };
   }, [
     linesGradient,
+    gradientStart,
+    gradientMid,
+    gradientEnd,
     enabledWaves,
     lineCount,
     lineDistance,
