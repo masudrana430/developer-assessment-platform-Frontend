@@ -7,6 +7,7 @@ export interface FlowingMenuItemData {
   link: string;
   text: string;
   image: string;
+  hoverText?: string;
 }
 
 interface FlowingMenuProps {
@@ -45,7 +46,7 @@ const FlowingMenu: React.FC<FlowingMenuProps> = ({
       <nav className="m-0 flex h-full flex-col p-0">
         {items.map((item, idx) => (
           <MenuItem
-            key={item.link}
+            key={item.text}
             {...item}
             speed={speed}
             textColor={textColor}
@@ -64,6 +65,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
   link,
   text,
   image,
+  hoverText,
   speed,
   textColor,
   marqueeBgColor,
@@ -76,6 +78,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
   const marqueeInnerRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<gsap.core.Tween | null>(null);
   const [repetitions, setRepetitions] = useState(4);
+  const marqueeText = hoverText ?? text;
 
   const animationDefaults = { duration: 0.6, ease: "expo" };
 
@@ -112,7 +115,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
     window.addEventListener("resize", calculateRepetitions);
 
     return () => window.removeEventListener("resize", calculateRepetitions);
-  }, [text, image]);
+  }, [marqueeText, image]);
 
   useEffect(() => {
     const setupMarquee = () => {
@@ -140,7 +143,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
       window.clearTimeout(timer);
       animationRef.current?.kill();
     };
-  }, [text, image, repetitions, speed]);
+  }, [marqueeText, image, repetitions, speed]);
 
   const handleMouseEnter = (ev: React.MouseEvent<HTMLAnchorElement>) => {
     if (
@@ -214,6 +217,9 @@ const MenuItem: React.FC<MenuItemProps> = ({
       <a
         className="relative flex h-full cursor-pointer items-center justify-center px-8 text-center text-[4vh] font-semibold uppercase no-underline"
         href={link}
+        onClick={(event) => {
+          if (link.startsWith("#")) event.preventDefault();
+        }}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         style={{ color: textColor }}
@@ -233,8 +239,8 @@ const MenuItem: React.FC<MenuItemProps> = ({
               key={idx}
               style={{ color: marqueeTextColor }}
             >
-              <span className="whitespace-nowrap px-[1vw] text-[4vh] font-normal uppercase leading-none">
-                {text}
+              <span className="whitespace-nowrap px-[1.2vw] text-[2.35vh] font-medium normal-case leading-none">
+                {marqueeText}
               </span>
               <div
                 className="mx-[2vw] my-[2em] h-[7vh] w-[200px] rounded-[50px] bg-cover bg-center py-[1em]"
